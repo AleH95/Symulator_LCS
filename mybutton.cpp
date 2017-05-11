@@ -12,9 +12,9 @@ void mybutton::setstan(int n)
     this->stan=n;
 }
 
-void mybutton::setlocked(int n)
+void mybutton::setlock(int n)
 {
-    this->locked=n;
+    this->lock=n;
 }
 
 int mybutton::getstan(void)
@@ -22,7 +22,7 @@ int mybutton::getstan(void)
     return this->stan;
 }
 
-int mybutton::getlocked(void)
+int mybutton::getlock(void)
 {
-    return this->locked;
+    return this->lock;
 }

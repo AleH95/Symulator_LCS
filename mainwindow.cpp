@@ -3,31 +3,24 @@
 
 #include "myheader.h"
 
-#define ZWR 5 //ilosc zwrotnic
-#define SEM 5 //ilosc semaforow
 
-#define LUNGHEZZA 85 //dlugosc przycisku zwrotnicy
-#define ALTEZZA 45 //wysokosc przycisku zwrotnicy
-
-#define WLUNG 1280 //dlugosc okna glownego
-#define WALT 720 //wysokosc okna glownego
-/*
-void blokuj(MainWindow* elia); //funkcja ktora powinna nastawic stan blokuj dla danych przyciskow
+/* dan
+void blokuj(MainWindow* elia); //funkcja ktora powinna nastawic stan blokuj dlaych przyciskow
 void resetuj(MainWindow* elia); //funkcja ktora powinna odblokowac stan blokowany przyciskow
 */
-void blokuj(MainWindow* elia)
+/*void blokuj(MainWindow* elia)
 {
     Ui::MainWindow *ala = elia->wskaznik(); //wyglada na to ze dostajemy sie do wskaznika
     //ala->progressBar->reset();
     ala->progressBar->setValue(88); //lecz wywolanie akcji na progress bar nic nie powoduje
-}
-
+}*/
+/*
 void resetuj(MainWindow* elia)
 {
     //MainWindow::ui->progressBar->reset();
     ;
 }
-
+*/
 Ui::MainWindow* MainWindow::wskaznik()
 {
     return this->ui;
@@ -46,19 +39,19 @@ MainWindow::MainWindow(QWidget *parent) :
     lvl->setGeometry(100,100,100,50);
     */
     int i,lspacing,wspacing;
-    mybutton *buttons[ZWR+SEM];
+    //mybutton *buttons[ZWR+SEM];
     lspacing=wspacing=15;
 
-    QPushButton *bottone1,*bottone2;
+    //QPushButton *bottone1,*bottone2;
     bottone1 = new QPushButton("Potwierdz",this);
     bottone2 = new QPushButton("Resetuj",this);
     bottone1->setGeometry(150,150,100,100);
     bottone2->setGeometry(350,150,100,100);
-    bottone1->setDefault(true); //wcisniecie enter w okienku powoduje ze wciska sie ten przycisk
+    //bottone1->setDefault(true); //wcisniecie enter w okienku powoduje ze wciska sie ten przycisk
     //bottone2->setAutoDefault(false); //??
-     ui->progressBar->setValue(50);
+     ui->progressBar->setValue(89);
 
-    connect(bottone1,SIGNAL(clicked()),SLOT(blokuj(this)));
+     QObject::connect(ui->Premimi,SIGNAL(QPushButton::pressed()),SLOT(MainWindow::nastaw(QPushButton*,int)));
     //connect(bottone2,SIGNAL(released()),resetuj(this));
 
 
@@ -68,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
         buttons[i]->setGeometry(lspacing,wspacing,LUNGHEZZA,ALTEZZA);
         buttons[i]->setToolTip("Odcinek 1-2");
         buttons[i]->setText("Zwrotnica1");
+        //buttons[i].setstan(0);
         lspacing=lspacing+LUNGHEZZA + 15;
         if(lspacing>WLUNG)
         {
@@ -78,10 +72,27 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             wspacing=0;
         }
+
+        mybutton *elia;
+        elia = buttons[i];
+        elia->setText("ala");
+        elia->setstan(5);
+        //elia->setEnabled(false);
     }
+
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::nastaw(QPushButton *elia, int n)
+{
+    QPushButton *butt = new QPushButton(this);
+    butt->setGeometry(200,200,50,50);
+    elia->setText("ela");
+    //elia->setstan(n);
+    elia->setEnabled(false);
 }

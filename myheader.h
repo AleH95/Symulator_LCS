@@ -8,4 +8,6 @@
 
 #include <QPushButton>
 
+#include <new>
+
 #endif // MYHEADER_H
