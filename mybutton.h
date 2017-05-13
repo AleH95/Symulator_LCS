@@ -2,20 +2,11 @@
 #define MYBUTTON_H
 
 
-//Tworzenie nowej klasy przyciskow ktora pozwala na przechowyanie zmiennych
-//Stanu -> aktualnym stanie przycisku
-//Blokuj -> w przypadku potwoierdzenia trasy
+//http://doc.qt.io/qt-5/qgridlayout.html - Grid for automatic dispositions of buttons
+//https://doc.qt.io/archives/qq/qq10-signalmapper.html - Mapping to connect multiple emits to one signal
+//http://doc.qt.io/qt-4.8/qbuttongroup.html - ButtonGroup, groups buttons ad disables the unchecked (?)
 
-#include <QPushButton>
-
-#define ZWR 5 //ilosc zwrotnic
-#define SEM 5 //ilosc semaforow
-
-#define LUNGHEZZA 85 //dlugosc przycisku zwrotnicy
-#define ALTEZZA 45 //wysokosc przycisku zwrotnicy
-
-#define WLUNG 1280 //dlugosc okna glownego
-#define WALT 720 //wysokosc okna glownego
+#include "myheader.h"
 
 class mybutton : public QPushButton
 {
@@ -26,10 +17,11 @@ public:
     mybutton(const QIcon &icon, const QString &text, QWidget *parent = Q_NULLPTR);
     ~mybutton();
 
-    void setstan(int n=0);
-    void setlock(int n=0);
+    void setstan(); //inkrementacka stanu zwrotnicy
+    void setlock(); //nastawianie blokady zwrotnicy
     int getstan(void);
     int getlock(void);
+    void reset(); //inicializacia stanu i blokady zwrotnicy do zera
 
 private:
     int stan;

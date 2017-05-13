@@ -1,13 +1,12 @@
 #ifndef MYHEADER_H
 #define MYHEADER_H
 
-//oblusga grafican przyciskow
-#include "mybutton.h"
-#include <QFont>
-#include <QIcon>
+#include <QPushButton> //klasa reprezentujaca przyciski
+#include "mybutton.h" //klasa dziedziczaca z QPushButton, reprezentuje zwrotnice
+#include <QSignalMapper> //pozwalajace rozroznianie ktory przycisk emitowal sygnal
+#include <QGridLayout> //do wisualizacji przyciskow w grupie
 
-#include <QPushButton>
-
-#include <new>
+//Macro
+#define ZWR 5 //ilosc zwrotnic
 
 #endif // MYHEADER_H

@@ -1,86 +1,43 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "myheader.h"
-
-
-/* dan
-void blokuj(MainWindow* elia); //funkcja ktora powinna nastawic stan blokuj dlaych przyciskow
-void resetuj(MainWindow* elia); //funkcja ktora powinna odblokowac stan blokowany przyciskow
-*/
-/*void blokuj(MainWindow* elia)
-{
-    Ui::MainWindow *ala = elia->wskaznik(); //wyglada na to ze dostajemy sie do wskaznika
-    //ala->progressBar->reset();
-    ala->progressBar->setValue(88); //lecz wywolanie akcji na progress bar nic nie powoduje
-}*/
-/*
-void resetuj(MainWindow* elia)
-{
-    //MainWindow::ui->progressBar->reset();
-    ;
-}
-*/
-Ui::MainWindow* MainWindow::wskaznik()
-{
-    return this->ui;
-}
-
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
+    ,ui(new Ui::MainWindow)
 {
-    setFixedSize(WLUNG,WALT);
     ui->setupUi(this);
-    /*
-    QPushButton *lvl = new QPushButton(this);
-    lvl->setText("ala");
-    lvl->setToolTip("elo");
-    lvl->setGeometry(100,100,100,50);
-    */
-    int i,lspacing,wspacing;
-    //mybutton *buttons[ZWR+SEM];
-    lspacing=wspacing=15;
+    // Set size of the window
+    setFixedSize(1280, 720);
 
-    //QPushButton *bottone1,*bottone2;
-    bottone1 = new QPushButton("Potwierdz",this);
-    bottone2 = new QPushButton("Resetuj",this);
-    bottone1->setGeometry(150,150,100,100);
-    bottone2->setGeometry(350,150,100,100);
-    //bottone1->setDefault(true); //wcisniecie enter w okienku powoduje ze wciska sie ten przycisk
-    //bottone2->setAutoDefault(false); //??
-     ui->progressBar->setValue(89);
+    QSignalMapper *signalMapper = new QSignalMapper(this); //tworzenie signal mapper
+    QWidget *widget = new QWidget(this);
+    butt_potw = new QPushButton("Potwierdz", this);     // Create and position the button, make "this" the parent
+    grid = new QGridLayout;
 
-     QObject::connect(ui->Premimi,SIGNAL(QPushButton::pressed()),SLOT(MainWindow::nastaw(QPushButton*,int)));
-    //connect(bottone2,SIGNAL(released()),resetuj(this));
-
-
-    for(i=0;i<(ZWR+SEM);i++)
+    for (int i = 0; i < ZWR; i++)
     {
-        buttons[i]=new mybutton(this);
-        buttons[i]->setGeometry(lspacing,wspacing,LUNGHEZZA,ALTEZZA);
-        buttons[i]->setToolTip("Odcinek 1-2");
-        buttons[i]->setText("Zwrotnica1");
-        //buttons[i].setstan(0);
-        lspacing=lspacing+LUNGHEZZA + 15;
-        if(lspacing>WLUNG)
-        {
-            lspacing=0;
-            wspacing=wspacing+ALTEZZA+15;
-        }
-        if(wspacing>WALT)
-        {
-            wspacing=0;
-        }
-
-        mybutton *elia;
-        elia = buttons[i];
-        elia->setText("ala");
-        elia->setstan(5);
-        //elia->setEnabled(false);
+        QString text = QString::number(i); //tworzeniu tekstu dla przycisku
+        butt_zwr[i] = new mybutton(text); //nastawianie liczby dla tekstu na dany przycisk
+        butt_zwr[i]->reset(); //inicjalizowanie parametrow zwrotnic
+        grid->addWidget(butt_zwr[i],0,i); //dodanie zwrotnicy do grid na dany wiersz i kolumne
+        connect(butt_zwr[i], SIGNAL(clicked()), signalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
+        signalMapper->setMapping(butt_zwr[i], i); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
     }
+    butt_potw->setGeometry(100,100,200,50);
+    grid->addWidget(butt_potw,1,0); //dodanie przycisku potwierdzenia do grid
+    grid->setSpacing(15); //nastawianie minimalnej odleglosci (horizontal and vertical) dla elementow grid
+    NullLocked(); //zerowanie tablicy zwrotnic to lock
+    /*MainWindow to poszczegolny przypadek dla ktorego konieczne jest przypisanie grid do widget*/
+    widget->setLayout(grid); //nastawianie layoutu
+    widget->setGeometry(0,350,720,300); //umieszczanie layoutu w glownym oknie
 
-
+/*
+ * SIGNAL AND SLOTS:
+ * SIGNAL variables can't be fewer than SLOTS variables!!!
+ *
+*/
+    connect(signalMapper, SIGNAL(mapped(int)),this,SLOT(ChangeStan(int)));
+    connect(butt_potw,SIGNAL(clicked(bool)),this,SLOT(Lock()));
 }
 
 MainWindow::~MainWindow()
@@ -88,11 +45,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::nastaw(QPushButton *elia, int n)
+
+void MainWindow::ChangeStan(int n)
 {
-    QPushButton *butt = new QPushButton(this);
-    butt->setGeometry(200,200,50,50);
-    elia->setText("ela");
-    //elia->setstan(n);
-    elia->setEnabled(false);
+    butt_zwr[n]->setstan();
+    if(butt_zwr[n]->getstan()!=0)
+    {
+        butt_tolock[n]=&butt_zwr[n];
+    }
+}
+
+void MainWindow::NullLocked()
+{
+    int i;
+    for(i=0;i<ZWR;i++)
+    {
+        butt_tolock[i]=0;
+    }
+}
+
+void MainWindow::Lock()
+{
+    int i;
+    for(i=0;i<ZWR;i++)
+    {
+        if(butt_tolock[i]!=0)
+        {
+            (*butt_tolock[i])->setlock();
+            (*butt_tolock[i])->setDisabled(true);
+        }
+    }
 }

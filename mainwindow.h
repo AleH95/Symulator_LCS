@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "mybutton.h"
+#include "myheader.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,16 +15,19 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    Ui::MainWindow* wskaznik(); //metoda klasy pozwalajaca na otrzymanie wartosci wskaznika okna (polaczenia z obiektami utworzonymi w danym oknie)
+    void NullLocked(); //inicializacia **tablicy do zera
 
 private:
     Ui::MainWindow *ui;
-    mybutton *buttons[ZWR+SEM];
-    QPushButton *bottone1,*bottone2;
+    mybutton *butt_zwr[ZWR]; //tablica zwrotnic
+    QPushButton *butt_potw, *blokuj, *reset; //przyciski potwierdzenia trasy i resetowania
+    QGridLayout *grid; //grid grupujaca przyciski
+    mybutton **butt_tolock[ZWR]; //tablica wskaznikow przechowujaca zwrotnice o stanie != 0
 
-public slots:
-    void nastaw(QPushButton *elia, int n=0);
-    //void resetuj();
+
+private slots:
+    void ChangeStan(int n); //n=jaki przycisk zostal wcisnjety
+    void Lock();
 
 };
 
