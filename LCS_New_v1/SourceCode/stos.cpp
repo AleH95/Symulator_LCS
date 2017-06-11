@@ -70,6 +70,19 @@ int Stos::getiter()
     return iter;
 }
 
+int Stos::getpos(int num)
+{
+    int i;
+    for(i=0;i<roz;i++)
+    {
+        if(tab[i]==num)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void Stos::reset()
 {
     iter=roz;

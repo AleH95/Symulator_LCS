@@ -40,6 +40,7 @@ public slots:
     void Trasa(int j, char kolor); //Visual rapresentation of the path the train will go on
     bool inUp(int num,Stos* tab); //Function comparing if the Tor's j-th element is a Zwrotnica Gorna
     bool inDw(int num,Stos* tab);//Function comparing if the Tor's j-th element is a Zwrotnica Dolna
+    void ZwChange(int n);
 
     //Needed also:
         //TrasaReset() -> seting the illumination of the position of the zwrotnica and discarding all other illumination

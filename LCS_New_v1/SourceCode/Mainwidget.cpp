@@ -2,6 +2,7 @@
 #include "ui_widget.h"
 #include "stos.h"
 #include <QString>
+#include <QThread>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -20,7 +21,7 @@ Widget::Widget(QWidget *parent) :
     SsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
 
     connect( GenTrain,SIGNAL(clicked(bool)),this,SLOT(Train()) );
-    //connect(ZsignalMapper, SIGNAL(mapped(int)),this,SLOT(); //Zwrotnica signal mapper -> to implement slot handling zwrotnica's state change
+    connect(ZsignalMapper, SIGNAL(mapped(int)),this,SLOT(ZwChange(int))); //Zwrotnica signal mapper -> to implement slot handling zwrotnica's state change
                                                               //Also the visualization of this change
     //connect(SsignalMapper, SIGNAL(mapped(int)),this,SLOT(); //Zwrotnica signal mapper -> to implement slot handling semafor's confirmation
                                                                //Also the visualization of this confirmation
@@ -79,9 +80,11 @@ void Widget::inizializza()
             QString ela = "Z"+QString::number(j/(LZWROTNICE))+QString::number(i);
             Zwrotnice[j]->setObjectName(ela);
             Zwrotnice[j]->setText(ela);
+            Zwrotnice[j]->setCheckable(true);
             GBZwrotnice->addWidget(Zwrotnice[j],j/(LZWROTNICE),i);
-            connect(Zwrotnice[j], SIGNAL(clicked()), ZsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
-            ZsignalMapper->setMapping(Zwrotnice[j], ZwUpDw->Get()); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
+            connect(Zwrotnice[j], SIGNAL(toggled(bool)), ZsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
+            int temp = ZwUpDw->GetThat(j);
+            ZsignalMapper->setMapping(Zwrotnice[j], temp); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
                                                         //passing j that stores the coords of where to find the zwrotnica
             i++;
             if(i>=LZWROTNICE)
@@ -164,7 +167,8 @@ void Widget::Trasa(int j, char kolor)
             return;
         }
         alla[j]->setStyleSheet(tmpKol);
-        j=j-(j*LUNGHEZZA);
+        //j=j-(int(j/LUNGHEZZA)*LUNGHEZZA);
+        j=j-LUNGHEZZA;
         Trasa(j,kolor);
     }
     else if(tmpWTL==DOWN)
@@ -175,7 +179,8 @@ void Widget::Trasa(int j, char kolor)
             return;
         }
         alla[j]->setStyleSheet(tmpKol);
-        j=j+(j*LUNGHEZZA);
+        //j=j+(int(j/LUNGHEZZA)*LUNGHEZZA);
+        j=j+LUNGHEZZA;
         Trasa(j,kolor);
     }
 
@@ -209,4 +214,24 @@ bool Widget::inDw(int num,Stos* tab)
     }
     tab->reset();
     return false;
+}
+
+void Widget::ZwChange(int n)
+{
+    int zwnum = ZwUpDw->getpos(n);
+    bool check=Zwrotnice[zwnum]->isChecked();
+    Zwrotnice[zwnum]->setDisabled(true);
+    if(check==true)
+    {
+        Zwrotnice[zwnum]->setDown(true);
+    }
+    else
+    {
+        Zwrotnice[zwnum]->setDown(false);
+    }
+    QThread::msleep(500);
+    alla[n]->setWTL();
+    Zwrotnice[zwnum]->setDisabled(false);
+
+    //Verify the label's children and change color
 }

@@ -18,6 +18,7 @@ public:
     int GetThat(int num); //Zwracanie wartosci o rzadanym indeksie ze stosu
     int getroz(); //Rozmiar stosu
     int getiter(); //Pozycja iteratora we stosie
+    int getpos(int num);
     void reset(); //Resetowanie pozycji iteratora (Iterato=Rozmiar Stosu)
 };
 

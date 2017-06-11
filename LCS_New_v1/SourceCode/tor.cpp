@@ -10,7 +10,7 @@ Tor::Tor(int iT, int len, int typ) :
     WhereTLook=STRAIGHT;
 }
 
-void Tor::setWTL(QString string)
+void Tor::setWTL()
 {
     /*
     delete[] WhereTLook;
@@ -18,7 +18,23 @@ void Tor::setWTL(QString string)
     WhereTLook = new char[strlen(string)];
     strcpy(WhereTLook,string);
     */
-    WhereTLook = string;
+    if(Type==1)
+    {
+        if(WhereTLook==STRAIGHT)
+        {
+            WhereTLook=UP;
+            return;
+        }
+    }
+    else if (Type==2)
+    {
+        if(WhereTLook==STRAIGHT)
+        {
+            WhereTLook=DOWN;
+            return;
+        }
+    }
+    WhereTLook=STRAIGHT;
 }
 
 void Tor::setITrain()

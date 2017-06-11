@@ -45,7 +45,7 @@ public:
 
 public slots:
     //Nastawienie parametrow klasy
-    void setWTL(QString string);
+    void setWTL();
     void setITrain();
     void setLen(int num);
     void setType(int num);
