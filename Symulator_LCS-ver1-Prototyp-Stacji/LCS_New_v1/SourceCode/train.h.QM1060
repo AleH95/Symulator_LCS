@@ -1,0 +1,31 @@
+#ifndef TRAIN_H
+#define TRAIN_H
+
+
+class NEWTrain
+{
+private:
+    int Train_length;
+    bool Train_direction = true;
+    int IdTrain;
+
+public:
+    NEWTrain(int IdTrain);
+    NEWTrain(int Train_length, bool Train_direction, int idTrain);
+
+
+
+//wejście tablica torów do zatrzymania, prędość z jaką może poruszać się pociąg, dlugosc toru
+    void train_move(int route[], int max_train_speed, int tor_length );
+
+
+//Zwracanie parametrów
+    int GetTposition(int IdTrain);
+    int GetTlength(int IdTrain);
+
+};
+
+
+
+
+#endif // TRAIN_H
