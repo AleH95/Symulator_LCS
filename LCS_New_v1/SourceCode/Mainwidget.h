@@ -5,8 +5,12 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QSignalMapper>
+#include <QString>
+#include <QThread>
+#include <QLabel>
 #include "tor.h"
 #include "stos.h"
+#include "color.h"
 
 namespace Ui {
 class Widget;
@@ -34,13 +38,18 @@ private:
     QWidget* parentLayout; //Pointer for value of parent layout (USELESS)
     QSignalMapper *ZsignalMapper,*SsignalMapper; //Signal mappers for Zwrotnice and Semafory
     Stos *ZwUpDw; //Klass Stos containing all the Coords where to find Zwrotnice on the Visualization
+    Color *ZwKol;
 
 public slots:
     void Train(); //Generates Train
-    void Trasa(int j, char kolor); //Visual rapresentation of the path the train will go on
+    void Trasa(int j, char kolor, int flg); //Visual rapresentation of the path the train will go on
     bool inUp(int num,Stos* tab); //Function comparing if the Tor's j-th element is a Zwrotnica Gorna
     bool inDw(int num,Stos* tab);//Function comparing if the Tor's j-th element is a Zwrotnica Dolna
     void ZwChange(int n);
+    void cleanAdjacent(int n, QString stile);
+    void setZwStan(int n);
+    void clean(int n, QString stile);
+    void setFromStan(int tmp, QString stan);
 
     //Needed also:
         //TrasaReset() -> seting the illumination of the position of the zwrotnica and discarding all other illumination

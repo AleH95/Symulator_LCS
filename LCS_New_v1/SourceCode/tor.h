@@ -35,6 +35,7 @@ class Tor: public QLabel
 {
 private:
     QString WhereTLook;
+    QString From;
     //char* Direction; <- raczej do pociagu (pociag sie pojawia i w ktora strone ma jechac)
     int IsTrain;
     int Length;
@@ -49,11 +50,13 @@ public slots:
     void setITrain();
     void setLen(int num);
     void setType(int num);
+    void setFrom(QString string);
     //Zwracanie parametrow klasy
     QString getWTL();
     int getITrain();
     int getLen();
     int getType();
+    QString getFrom();
 };
 
 #endif // TOR_H

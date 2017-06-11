@@ -26,10 +26,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         Mainwidget.cpp \
     tor.cpp \
-    stos.cpp
+    stos.cpp \
+    color.cpp
 
 HEADERS  += Mainwidget.h \
     tor.h \
-    stos.h
+    stos.h \
+    color.h
 
 FORMS    += widget.ui

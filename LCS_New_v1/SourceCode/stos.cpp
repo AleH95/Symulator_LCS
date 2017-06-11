@@ -34,7 +34,7 @@ int Stos::Get()
     else
     {
         iter++;
-        return tab[iter];
+        return tab[iter-1];
     }
 }
 
@@ -85,5 +85,5 @@ int Stos::getpos(int num)
 
 void Stos::reset()
 {
-    iter=roz;
+    iter=0;
 }
