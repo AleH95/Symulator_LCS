@@ -20,7 +20,11 @@
 #define STARTX 0 //Pozycja pozioma Pojawiania sie pociagu
 #define STARTY 2 //Pozycja pionowa Pojawiania sie pociagu
 
+#define FINISHX 4
+#define FINISHY 2
+
 #define START (STARTY*LUNGHEZZA)+STARTX //Coords 2,0 = 0*LUNGHEZZA+2
+#define FINISH (FINISHY*LUNGHEZZA)+FINISHX
 
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up

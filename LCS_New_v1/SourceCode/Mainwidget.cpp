@@ -14,12 +14,16 @@ Widget::Widget(QWidget *parent) :
     //The size of the main window
     setFixedSize(1280,600);
     GenTrain = new QPushButton(this);
+    TrainArrived = new QPushButton(this);
     GenTrain->setText("START");
+    TrainArrived->setText("GONE");
+    TrainArrived->setGeometry(GenTrain->width(),0,GenTrain->width(),GenTrain->height());
 
     ZsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
     SsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
 
     connect( GenTrain,SIGNAL(clicked(bool)),this,SLOT(Train()) );
+    connect( TrainArrived,SIGNAL(clicked(bool)),this,SLOT(TrainGone()) );
     connect(ZsignalMapper, SIGNAL(mapped(int)),this,SLOT(ZwChange(int))); //Zwrotnica signal mapper -> to implement slot handling zwrotnica's state change
     //Also the visualization of this change
     //connect(SsignalMapper, SIGNAL(mapped(int)),this,SLOT(); //Zwrotnica signal mapper -> to implement slot handling semafor's confirmation
@@ -36,22 +40,17 @@ Widget::~Widget()
 
 void Widget::inizializza()
 {
+    //QRect rectangle;
+
     QLabel* tmpCol;
-    QList <Color *> kids;
-    int j,i=0;
-    int h,w; //Height and Widht of a Tor
-    int x,y; //Coordinants of Tor
+    int j,i,z;
+    i=z=0;
+    //int h,w; //Height and Widht of a Tor
+    //int x,y; //Coordinants of Tor
     MainLayout = new QVBoxLayout(this);
     GTory = new QGridLayout();
     GBZwrotnice = new QGridLayout();
     GBSemafory = new QGridLayout();
-
-    MainLayout->setSpacing(0);
-    MainLayout->addLayout(GTory);
-    GBZwrotnice->setSpacing(15);
-    MainLayout->addLayout(GBZwrotnice);
-    GBSemafory->setSpacing(15);
-    MainLayout->addLayout(GBSemafory);
 
     for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
     {
@@ -60,24 +59,47 @@ void Widget::inizializza()
         QString ela = "T"+QString::number(j/(LUNGHEZZA))+QString::number(i);
         alla[j]->setText(ela);
         alla[j]->setStyleSheet("background-color: grey");
-        /*
         if(inUp(j,ZwUpDw)==true)
         {
+
             alla[j]->setType(1);
+            VLay[z] = new QVBoxLayout(alla[j]);
+            VLay[z]->setSpacing(0);
+            VLay[z]->setContentsMargins(0,0,0,0);
+            tmpCol = ZwKol->get();
+            VLay[z]->addWidget(tmpCol);
+            //VLay[z]->setStretchFactor(tmpCol,0);
+            tmpCol = ZwKol->get();
+            tmpCol->setStyleSheet("background-color: yellow");
+            VLay[z]->addWidget(tmpCol);
+            //VLay[z]->setStretchFactor(tmpCol,0);
+            z++;
+/*
+            kids = alla[j]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+            if(!(kids.isEmpty()))
+            {
+                kids.at(1)->setStyleSheet("background-color: red");
+                kids.clear();
+            }
+*/
+
+
         }
         else if(inDw(j,ZwUpDw)==true)
         {
             alla[j]->setType(2);
-            ZwKol->get()->setParent(alla[j]);
-            ZwKol->get()->setParent(alla[j]);
-            kids = alla[j]->findChildren<Color *>();
-            //if(kids)
-           // {
-                kids.at(0)->setStyleSheet("background-color: yellow");
-            //}
-            kids.clear();
+            VLay[z] = new QVBoxLayout(alla[j]);
+            VLay[z]->setSpacing(0);
+            VLay[z]->setContentsMargins(0,0,0,0);
+            tmpCol = ZwKol->get();
+            tmpCol->setStyleSheet("background-color: yellow");
+            VLay[z]->addWidget(tmpCol);
+            //VLay[z]->setStretchFactor(tmpCol,0);
+            tmpCol = ZwKol->get();
+            VLay[z]->addWidget(tmpCol);
+            //VLay[z]->setStretchFactor(tmpCol,0);
+            z++;
         }
-        */
         GTory->addWidget(alla[j],j/(LUNGHEZZA),i);
         i++;
         if(i>=LUNGHEZZA)
@@ -124,30 +146,49 @@ void Widget::inizializza()
         }
     }
 
+    MainLayout->setSpacing(0);
+    MainLayout->addLayout(GTory);
+    GBZwrotnice->setSpacing(15);
+    MainLayout->addLayout(GBZwrotnice);
+    GBSemafory->setSpacing(15);
+    MainLayout->addLayout(GBSemafory);
+/*
     h = alla[0]->height();
     w = alla[0]->width();
     x = w/LUNGHEZZA;
     y = h/ALTEZZA;
     for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
     {
+        rectangle = GTory->contentsRect();
+        qDebug("GTORY WIDHT: %d",rectangle.width());
+        qDebug("GTORY HEIGHT: %d",rectangle.height());
+        qDebug("GTORY X: %d",rectangle.x());
+        qDebug("GTORY Y: %d",rectangle.y());
         if(inUp(j,ZwUpDw)==true)
         {
-            alla[j]->setType(1);
+            int nx = j/LUNGHEZZA;
+            int ny = j - (LUNGHEZZA*nx);
+            int widt = rectangle.width()/LUNGHEZZA;
+            int heig = rectangle.height()/ALTEZZA;
+            qDebug("nx: %d",nx);
+            qDebug("ny: %d",ny);
 
+            alla[j]->setType(1);
+            ///----//
             tmpCol = ZwKol->get();
-            tmpCol->setGeometry(0,0,100,h/8);
+            tmpCol->setGeometry(nx*widt,ny*heig,widt,heig);
             tmpCol->setParent(alla[j]);
 
             tmpCol = ZwKol->get();
-            tmpCol->setGeometry(x,(int)(j/LUNGHEZZA)*y,x,y);
+            tmpCol->setGeometry(nx*widt,(ny*heig)+heig,widt,heig);
             tmpCol->setParent(alla[j]);
 
             QWidget* tmpW=alla[j]->childAt(x,(int)(j/LUNGHEZZA)*y);
             tmpW->setStyleSheet("background-color: yellow");
             tmpW=alla[j]->childAt(0,0);
             tmpW->setStyleSheet("background-color: red");
-
-            /*
+            //----//
+            //--//
             kids = alla[j]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
             if(!kids.empty)
             {
@@ -156,12 +197,12 @@ void Widget::inizializza()
             }
             //To reimplement in order to distinguish the WhereToLook of zwrotnica
             //Distinguish between the two children of the label
-            */
+            //--//
         }
         else if(inDw(j,ZwUpDw)==true)
         {
             alla[j]->setType(2);
-            h = alla[j]->width();
+            //--//h = alla[j]->width();
             w = alla[j]->height();
 
             tmpCol = ZwKol->get();
@@ -173,9 +214,10 @@ void Widget::inizializza()
             tmpCol->setParent(alla[j]);
 
             QWidget* tmpW=alla[j]->childAt(0,0);
-            //tmpW->setStyleSheet("background-color: yellow");
+            //tmpW->setStyleSheet("background-color: yellow");//---//
         }
     }
+    */
 }
 
 void Widget::Train()
@@ -184,12 +226,16 @@ void Widget::Train()
     if(temptor->getITrain()==0)
     {
         temptor->setITrain();
-        {
+
             temptor->setStyleSheet("background-color: blue");
-        }
+
         Trasa((START+1),'w',temptor->getITrain());
     }
-
+    //----Temporary code to verify the functionality of the reverse functions
+    //temptor->setITrain();
+    //temptor=alla[FINISH];
+    //temptor->setITrain();
+    //temptor->setStyleSheet("background-color: blue");
 }
 
 void Widget::Trasa(int j, char kolor, int flg)
@@ -220,41 +266,30 @@ void Widget::Trasa(int j, char kolor, int flg)
         // or if the straight function isn't gone a line down the display
         if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||(j%LUNGHEZZA)==0)
         {
+            //alla[j-1]->setITrain();
             return;
         }
         clean(j,tmpKol);
         j++;
         Trasa(j,kolor,flg);
-        //stylesheet mtor[j]
-        //move right j++
-        //if(j>ALTEZZA*LUNGHEZZA or j<0){ return }
-        //Trasa(mtor[j],j,kolor)
     }
     else if(tmpWTL==UP)
     {
-        //verify children
-        //select children 1( the first is the upper)
-        //change kolor of children 1
-        //move up j=j-(j*LUNGHEZZA)
-        //Trasa(mtor[j],j,kolor)
         if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
         {
             return;
         }
         clean(j,tmpKol);
-        //j=j-(int(j/LUNGHEZZA)*LUNGHEZZA);
         j=j-LUNGHEZZA;
         Trasa(j,kolor,flg);
     }
     else if(tmpWTL==DOWN)
     {
-        //move down j=j+(j*LUNGHEZZA)
         if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
         {
             return;
         }
         clean(j,tmpKol);
-        //j=j+(int(j/LUNGHEZZA)*LUNGHEZZA);
         j=j+LUNGHEZZA;
         Trasa(j,kolor,flg);
     }
@@ -353,46 +388,53 @@ void Widget::cleanAdjacent(int n, QString stile)
     }
 }
 
-/*
-void Widget::cleanAdjacent(int n)
-{
-    QString tmpFrom = alla[n]->getFrom();
-    QString tmpKol = "background-color: grey";
-    int tmp;
-
-    if(tmpFrom==STRAIGHT)
-    {
-        tmp=n-LUNGHEZZA;
-        clean(tmp,tmpKol);
-        tmp=n+LUNGHEZZA;
-        clean(tmp,tmpKol);
-    }
-    else
-    {
-
-        tmp=n-1;
-        clean(tmp,tmpKol);
-        tmp=n+1;
-        clean(tmp,tmpKol);
-        if(tmpFrom==UP)
-        {
-            tmp=n+LUNGHEZZA;
-            clean(tmp,tmpKol);
-        }
-        else if(tmpFrom==DOWN)
-        {
-            tmp=n-LUNGHEZZA;
-            clean(tmp,tmpKol);
-        }
-    }
-}
-*/
-
 void Widget::clean(int n, QString stile)
 {
+    int x,y,z;
+    x=y=z=0;
     if(n<(ALTEZZA*LUNGHEZZA)&&(n>0))
     {
-        alla[n]->setStyleSheet(stile);
+        kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+        if(!(kids.isEmpty()))
+        {
+            if(alla[n]->getWTL()==UP)
+            {
+                x=0;
+                y=1;
+            }
+            else if(alla[n]->getWTL()==DOWN)
+            {
+                x=1;
+                y=0;
+            }
+            else if(alla[n]->getType()!=1)
+            {
+                x=0;
+                y=1;
+                //What when blok is straight(?)
+                //from where trasa is coming: up or down??
+            }
+            else if(alla[n]->getType()!=2)
+            {
+                x=1;
+                y=0;
+            }
+            else
+            {
+                qDebug("idk");
+            }
+            kids.at(x)->setStyleSheet(stile);
+            kids.at(y)->setStyleSheet("background-color: grey");
+            kids.clear();
+        }
+        else if(alla[n]->getITrain()==1)
+        {
+            alla[n]->setStyleSheet("background-color: blue");
+        }
+        else
+        {
+            alla[n]->setStyleSheet(stile);
+        }
     }
 }
 
@@ -402,16 +444,50 @@ void Widget::setZwStan(int n)
     alla[n]->setWTL();
     if(alla[n]->getWTL()==UP)
     {
+        kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+        if(!(kids.isEmpty()))
+        {
+            kids.at(0)->setStyleSheet("background-color: yellow");
+            kids.at(1)->setStyleSheet("background-color: grey");
+            kids.clear();
+        }
         tmp=n-LUNGHEZZA;
         setFromStan(tmp,DOWN);
     }
     else if(alla[n]->getWTL()==DOWN)
     {
+        kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+        if(!(kids.isEmpty()))
+        {
+            kids.at(0)->setStyleSheet("background-color: grey");
+            kids.at(1)->setStyleSheet("background-color: yellow");
+            kids.clear();
+        }
         tmp=n+LUNGHEZZA;
         setFromStan(tmp,UP);
     }
     else
     {
+        if(alla[n]->getType()==1)
+        {
+            kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+            if(!(kids.isEmpty()))
+            {
+                kids.at(1)->setStyleSheet("background-color: yellow");
+                kids.at(0)->setStyleSheet("background-color: grey");
+                kids.clear();
+            }
+        }
+        if(alla[n]->getType()==2)
+        {
+            kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+            if(!(kids.isEmpty()))
+            {
+                kids.at(0)->setStyleSheet("background-color: yellow");
+                kids.at(1)->setStyleSheet("background-color: grey");
+                kids.clear();
+            }
+        }
         tmp=n-1;
         setFromStan(tmp,STRAIGHT);
         tmp=n+1;
@@ -424,5 +500,127 @@ void Widget::setFromStan(int tmp, QString stan)
     if(tmp<(ALTEZZA*LUNGHEZZA)&&(tmp>0))
     {
         alla[tmp]->setFrom(stan);
+    }
+}
+
+void Widget::TrasaReverse(int j, char kolor, int flg)
+{
+    QString tmpWTL = alla[j]->getWTL();
+    QString tmpKol = "background-color: ";
+    if(flg==0)
+    {
+        if((alla[j]->getType())!=0)
+        {
+            kolor='y';
+        }
+        else
+        {
+            kolor='e';
+        }
+    }
+    if(kolor=='r'){ tmpKol.append("red"); }
+    else if(kolor=='g'){ tmpKol.append("green"); }
+    else if(kolor=='e'){ tmpKol.append("grey"); }
+    else if(kolor=='y'){ tmpKol.append("yellow"); }
+    else if(kolor=='w'){ tmpKol.append("white"); }
+
+    if(tmpWTL==STRAIGHT)
+    {
+        //Verifying of the variable j isn't out of range,
+        // or if the straight function isn't gone a line down the display
+        if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||(j%LUNGHEZZA)==0)
+        {
+            alla[j]->setITrain();
+            clean(j,"background-color: grey");
+            return;
+        }
+        clean(j,tmpKol);
+        j--;
+        TrasaReverse(j,kolor,flg);
+    }
+    else if(tmpWTL==UP)
+    {
+        if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
+        {
+            return;
+        }
+        clean(j,tmpKol);
+        j=j+LUNGHEZZA;
+        TrasaReverse(j,kolor,flg);
+    }
+    else if(tmpWTL==DOWN)
+    {
+        if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
+        {
+            return;
+        }
+        clean(j,tmpKol);
+        j=j-LUNGHEZZA;
+        TrasaReverse(j,kolor,flg);
+    }
+
+}
+
+void Widget::cleanAdjacentReverse(int n, QString stile)
+{
+    int tmp1, tmp2;
+    QString stilo = "background-color: yellow";
+    for(tmp1=n;tmp1>0;tmp1=tmp1-LUNGHEZZA)
+    {
+        tmp2=tmp1+1;
+        while(true)
+        {
+            tmp2--;
+            if((alla[tmp2]->getType())!=0)
+            {
+                clean(tmp2,stilo);
+            }
+            else
+            {
+                clean(tmp2,stile);
+            }
+            if(tmp2%LUNGHEZZA==0)
+            {
+                break;
+            }
+        }
+    }
+    for(tmp1=n+LUNGHEZZA;tmp1<ALTEZZA*LUNGHEZZA;tmp1=tmp1+LUNGHEZZA)
+    {
+        tmp2=tmp1+1;
+        while(true)
+        {
+            tmp2--;
+            if((alla[tmp2]->getType())!=0)
+            {
+                clean(tmp2,stilo);
+            }
+            else
+            {
+                clean(tmp2,stile);
+            }
+            if(tmp2%LUNGHEZZA==0)
+            {
+                break;
+            }
+        }
+    }
+}
+
+void Widget::TrainGone()
+{
+    temptor=alla[FINISH];
+    if(temptor->getITrain()==1)
+    {
+        //temptor->setITrain();
+        /*
+        {
+            temptor->setStyleSheet("background-color: blue");
+        }
+        */
+        //alla[START]->setITrain();
+        cleanAdjacentReverse(FINISH,"background-color: grey");
+        TrasaReverse((FINISH-1),'w',alla[START]->getITrain());
+        temptor->setStyleSheet("background-color: blue");
     }
 }
