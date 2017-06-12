@@ -27,11 +27,15 @@ SOURCES += main.cpp\
         Mainwidget.cpp \
     tor.cpp \
     stos.cpp \
-    color.cpp
+    color.cpp \
+    pociag.cpp \
+    thread.cpp
 
 HEADERS  += Mainwidget.h \
     tor.h \
     stos.h \
-    color.h
+    color.h \
+    pociag.h \
+    thread.h
 
 FORMS    += widget.ui

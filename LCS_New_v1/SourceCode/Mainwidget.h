@@ -11,6 +11,8 @@
 #include "tor.h"
 #include "stos.h"
 #include "color.h"
+#include "pociag.h"
+//#include "thread.h"
 
 namespace Ui {
 class Widget;
@@ -19,6 +21,7 @@ class Widget;
 class Widget : public QWidget
 {
     Q_OBJECT
+    friend class WThread;
 
 public:
     explicit Widget(QWidget *parent = 0);
@@ -42,6 +45,8 @@ private:
     Color *ZwKol;
     QVBoxLayout* VLay[UZW+DZW];
     QList <Color *> kids;
+    Pociag *Ciuf;
+
 
 public slots:
     void Train(); //Generates Train
@@ -56,7 +61,11 @@ public slots:
     void clean(int n, QString stile);
     void setFromStan(int tmp, QString stan);
     void TrainGone();
-
+    void TrasaPociag(int n);
+    double trasaTime(int nrciuf,int nrtor);
+    double TrainTime(int nrciuf,int nrtor);
+    double kmhTOms(double vel);
+    double secTOms(double sec);
     //Needed also:
         //TrasaReset() -> seting the illumination of the position of the zwrotnica and discarding all other illumination
 };

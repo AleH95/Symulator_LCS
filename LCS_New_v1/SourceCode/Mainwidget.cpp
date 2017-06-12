@@ -225,6 +225,8 @@ void Widget::Train()
     temptor=alla[START];
     if(temptor->getITrain()==0)
     {
+        Pociag::increment();
+        Ciuf = new Pociag[Pociag::getQuanto()];
         temptor->setITrain();
 
             temptor->setStyleSheet("background-color: blue");
@@ -264,7 +266,7 @@ void Widget::Trasa(int j, char kolor, int flg)
     {
         //Verifying of the variable j isn't out of range,
         // or if the straight function isn't gone a line down the display
-        if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||(j%LUNGHEZZA)==0)
+        if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||((j%PERON)==0)||((j%LUNGHEZZA)==0))
         {
             //alla[j-1]->setITrain();
             return;
@@ -367,7 +369,7 @@ void Widget::cleanAdjacent(int n, QString stile)
                    clean(tmp2,stile);
                 }
             tmp2++;
-            if(tmp2%LUNGHEZZA==0)
+            if(((tmp2%PERON)==0)||((tmp2%PERON)==0))
             {
                 break;
             }
@@ -380,7 +382,7 @@ void Widget::cleanAdjacent(int n, QString stile)
         {
             clean(tmp2,stile);
             tmp2++;
-            if(tmp2%LUNGHEZZA==0)
+            if((tmp2%LUNGHEZZA)==0)
             {
                 break;
             }
@@ -528,7 +530,7 @@ void Widget::TrasaReverse(int j, char kolor, int flg)
     {
         //Verifying of the variable j isn't out of range,
         // or if the straight function isn't gone a line down the display
-        if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||(j%LUNGHEZZA)==0)
+        if(j>(ALTEZZA*LUNGHEZZA)||(j<0)||((j%LUNGHEZZA)==0)||((j%PERON)==0))
         {
             alla[j]->setITrain();
             clean(j,"background-color: grey");
@@ -579,7 +581,7 @@ void Widget::cleanAdjacentReverse(int n, QString stile)
             {
                 clean(tmp2,stile);
             }
-            if(tmp2%LUNGHEZZA==0)
+            if((tmp2%LUNGHEZZA)==0)
             {
                 break;
             }
@@ -599,7 +601,7 @@ void Widget::cleanAdjacentReverse(int n, QString stile)
             {
                 clean(tmp2,stile);
             }
-            if(tmp2%LUNGHEZZA==0)
+            if((tmp2%LUNGHEZZA==0)||(tmp2%PERON==0))
             {
                 break;
             }
@@ -623,4 +625,74 @@ void Widget::TrainGone()
         TrasaReverse((FINISH-1),'w',alla[START]->getITrain());
         temptor->setStyleSheet("background-color: blue");
     }
+}
+
+void Widget::TrasaPociag(int n)
+{
+    /*
+    QString tmpWTL = alla[j]->getWTL();
+    if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
+    {
+        return;
+    }
+    if(tmpWTL==STRAIGHT)
+    {
+        //Verifying of the variable j isn't out of range,
+        // or if the straight function isn't gone a line down the display
+        if((j%LUNGHEZZA)==0)
+        {
+            //alla[j-1]->setITrain();
+            return;
+        }
+        if((j%PERON)==0)
+        {
+            alla[j]->setITrain();
+        }
+        alla[j]->Length();
+        clean(j,tmpKol);
+        j++;
+        Trasa(j,kolor,flg);
+    }
+    else if(tmpWTL==UP)
+    {
+        clean(j,tmpKol);
+        j=j-LUNGHEZZA;
+        Trasa(j,kolor,flg);
+    }
+    else if(tmpWTL==DOWN)
+    {
+        clean(j,tmpKol);
+        j=j+LUNGHEZZA;
+        Trasa(j,kolor,flg);
+    }
+    */
+}
+
+double Widget::trasaTime(int nrciuf,int nrtor)
+{
+    double Tdlg=alla[nrtor]->getLen();
+    double Pdlg=Ciuf->getDlg();
+    double Pvel=Ciuf->getPredkosc();
+
+    double wynik = (Tdlg+Pdlg)/Pvel;
+    return wynik;
+}
+
+double Widget::TrainTime(int nrciuf,int nrtor)
+{
+    double Pdlg=Ciuf->getDlg();
+    double Pvel=Ciuf->getPredkosc();
+
+    double wynik = Pdlg/Pvel;
+    return wynik;
+}
+
+double Widget::kmhTOms(double vel)
+{
+    return (vel*3.6);
+}
+
+double secTOms(double sec)
+{
+    return (sec*1000);
 }
