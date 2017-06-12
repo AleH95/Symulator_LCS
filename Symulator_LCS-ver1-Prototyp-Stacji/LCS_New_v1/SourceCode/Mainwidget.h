@@ -5,12 +5,14 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QSignalMapper>
+#include <QString>
 #include <QTimer>
+#include <QThread>
+#include <QLabel>
 #include "tor.h"
 #include "stos.h"
+#include "color.h"
 #include "train.h"
-
-
 
 namespace Ui {
 class Widget;
@@ -30,7 +32,7 @@ private:
     Ui::Widget *ui;
     QGridLayout *GTory,*GBZwrotnice,*GBSemafory; //grids for window components
     QVBoxLayout *MainLayout; //Main Layout that is displayed (contains the other layaouts)
-    Tor *alla[ALTEZZA*LUNGHEZZA], *train_route; //Array of blocks for visual display (Tor+ZwrotnicaGorna/Dolna)
+    Tor *alla[ALTEZZA*LUNGHEZZA]; //Array of blocks for visual display (Tor+ZwrotnicaGorna/Dolna)
     QPushButton* Zwrotnice[AZWROTNICE*LZWROTNICE]; //Array of buttons Zwrotnica
     QPushButton* Semafory[ASEMAFORY*LSEMAFORY]; //Array of Semafors Zwrotnica
     Tor *temptor; //Pointer for temporary value od Tor
@@ -38,17 +40,22 @@ private:
     QWidget* parentLayout; //Pointer for value of parent layout (USELESS)
     QSignalMapper *ZsignalMapper,*SsignalMapper; //Signal mappers for Zwrotnice and Semafory
     Stos *ZwUpDw; //Klass Stos containing all the Coords where to find Zwrotnice on the Visualization
-    NEWTrain *pociag[NUM_TRAINS];
+    Color *ZwKol;
+    TTrain *pociag;
     QTimer *timer;
-
+    //int train_route[ROZMIARTRASY],licznik_train_route;
 
 public slots:
     void Train(); //Generates Train
-    void Trasa(int j, char kolor); //Visual rapresentation of the path the train will go on
+    void Trasa(int j, char kolor, int flg); //Visual rapresentation of the path the train will go on
     bool inUp(int num,Stos* tab); //Function comparing if the Tor's j-th element is a Zwrotnica Gorna
     bool inDw(int num,Stos* tab);//Function comparing if the Tor's j-th element is a Zwrotnica Dolna
     void ZwChange(int n);
-
+    void cleanAdjacent(int n, QString stile);
+    void setZwStan(int n);
+    void clean(int n, QString stile);
+    void setFromStan(int tmp, QString stan);
+    void train_move(int old_licznik,int licznik);
 
     //Needed also:
         //TrasaReset() -> seting the illumination of the position of the zwrotnica and discarding all other illumination

@@ -1,19 +1,20 @@
 #include "train.h"
 
-NEWTrain::NEWTrain()
+TTrain::TTrain()
 {
-    int actual_position = 10;
-    int Train_length = 40;
-    bool Train_direction = true;
+     //actual_position = 10;
+    // Train_length = 40;
+    // Train_direction = true;
 }
 
-NEWTrain::NEWTrain(int Tlength, bool Tdirection, int Tactual_position)
+TTrain::TTrain(int Tlength, bool Tdirection, int Tactual_position)
 {
-    int Train_length = Tlength;
-    bool Train_direction = Tdirection;
-    int actual_position = Tactual_position;
-};
+     Train_length = Tlength;
+     Train_direction = Tdirection;
+     actual_position = Tactual_position;
+}
 
+/*
 void train_move(Tor *train_route)
 {
      //dodać dzielenie albo odejmowanie w zaleznosci od dlogosci toru
@@ -27,13 +28,13 @@ void train_move(Tor *train_route)
 
 
 }
-
-int NEWTrain::GetTposition()
+*/
+int TTrain::GetTposition()
 {
     return actual_position;
 }
 
-int NEWTrain::GetTlength()
+int TTrain::GetTlength()
 {
     return Train_length;
 }

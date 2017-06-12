@@ -11,8 +11,6 @@
 #define UP "Up"
 #define DOWN "Down"
 
-
-
 #define LZWROTNICE 3 //Ilosc przyciskow zwrotnic w poziomie
 #define AZWROTNICE 1 //Ilosc przyciskow zwrotnic w pionie
 
@@ -37,13 +35,13 @@ class Tor: public QLabel
 {
 private:
     QString WhereTLook;
+    QString From;
     //char* Direction; <- raczej do pociagu (pociag sie pojawia i w ktora strone ma jechac)
     int IsTrain;
     int Length;
     int Type; //0=Tor, 1=ZwrotnicaGorna, 2=ZwrotnicaDolna
 public:
     Tor();
-    Tor(const Tor&);
     Tor(int iT, int len, int typ);
 
 public slots:
@@ -52,11 +50,13 @@ public slots:
     void setITrain();
     void setLen(int num);
     void setType(int num);
+    void setFrom(QString string);
     //Zwracanie parametrow klasy
     QString getWTL();
     int getITrain();
     int getLen();
     int getType();
+    QString getFrom();
 };
 
 #endif // TOR_H

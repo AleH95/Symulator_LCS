@@ -10,7 +10,7 @@
 #define ROZMIARTRASY 10
 #define TIMER_SPEED 1000
 
-class TTrain
+class NEWTrain
 {
 private:
     int Train_length;
@@ -18,9 +18,9 @@ private:
     int actual_position;
 
 public:
-    TTrain();
-    TTrain(int Tlength, bool Tdirection, int Tactual_position);
-
+    NEWTrain();
+    NEWTrain(int Tlength, bool Tlength, int Tactual_position);
+public slots:
 //wejście tablica torów do zatrzymania, prędość z jaką może poruszać się pociąg, dlugosc toru
    // void train_move(Tor *train_route);
 
