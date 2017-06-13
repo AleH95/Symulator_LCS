@@ -8,35 +8,32 @@ Widget::Widget(QWidget *parent) :
 {
     //Temporary table of zwrotnice Gorne and Dolne, it'll be written to Stos
     //The table content is written as j where j = (Row*LUNGHEZZA ) + Column
-    //qDebug("4/5 = %d",4/5);
-    //qDebug("12/5 = %d",12/5);
     WherePerony();
     int tmpzw[UZW+DZW] = {8,11,12};
     int tmptrain[TRAIN] = {(5*LUNGHEZZA)+0,(6*LUNGHEZZA)+0,(5*LUNGHEZZA)+28,(6*LUNGHEZZA)+28};
+    int tmpsem[SEM] = {2,3,45,89}; //<----------
+    int traincanbe[SEM] = {(5*LUNGHEZZA)+0,(6*LUNGHEZZA)+0,(5*LUNGHEZZA)+28,(6*LUNGHEZZA)+28};
     ZwKol = new Color(2*(UZW+DZW)); //Pod labele, do zmieniania koloru toru
     ZwUpDw = new Stos(UZW+DZW,tmpzw);
+    SemStos = new Stos(SEM,tmpsem); //<---------
     Generation = new Stos(TRAIN,tmptrain);
+    TrainCan = new Stos(SEM,traincanbe);
     Ciuf=NULL;
     //The size of the main window
     setFixedSize(1280,600);
-    //GenTrain = new QPushButton(this);
-    //TrainArrived = new QPushButton(this);
-    //GenTrain->setText("START");
-    //TrainArrived->setText("GONE");
-    //TrainArrived->setGeometry(GenTrain->width(),0,GenTrain->width(),GenTrain->height());
+
 
     ZsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
     SsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
     GsignalMapper = new QSignalMapper(this);
 
-    //connect( GenTrain,SIGNAL(clicked(bool)),this,SLOT(Train()) );
-    //connect( TrainArrived,SIGNAL(clicked(bool)),this,SLOT(TrainGone()) );
     connect(ZsignalMapper, SIGNAL(mapped(int)),this,SLOT(ZwChange(int)));
     //Zwrotnica signal mapper -> to implement slot handling zwrotnica's state change
     //Also the visualization of this change
     //connect(SsignalMapper, SIGNAL(mapped(int)),this,SLOT(); //Zwrotnica signal mapper -> to implement slot handling semafor's confirmation
     //Also the visualization of this confirmation
     connect(GsignalMapper, SIGNAL(mapped(int)),this,SLOT(Train(int)));
+    connect(SsignalMapper, SIGNAL(mapped(int)),this,SLOT(SemaforChanged(int)));
     inizializza();
 
     ui->setupUi(this);
@@ -49,21 +46,16 @@ Widget::~Widget()
 
 void Widget::inizializza()
 {
-    //QRect rectangle;
-
     QLabel* tmpCol;
     int j,i,z;
     i=z=0;
-    //int h,w; //Height and Widht of a Tor
-    //int x,y; //Coordinants of Tor
     MainLayout = new QVBoxLayout(this);
     GTory = new QGridLayout();
-    //VGenTrain = new QVBoxLayout();
     HorizontalZwSemGen = new QHBoxLayout();
     GBZwrotnice = new QGridLayout();
     GBSemafory = new QGridLayout();
 //generowanie gridu
-    for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
+    for(j=0;j<LUNGHEZZA*ALTEZZA;j++)
     {
         alla[j] = new Tor(0,100,0);
         //variable storing the coordinants on the display of a button
@@ -72,27 +64,19 @@ void Widget::inizializza()
         alla[j]->setStyleSheet("background-color: grey");
         if(inUp(j,ZwUpDw)==true)
         {
-
+            //QPixmap pix("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Materialy_Kuba/Zwrotnica_Gorna_Pusta.png");
             alla[j]->setType(1);
+            //alla[j]->setPixmap(pix);
+            //alla[j]->setMask(pix.mask());
             VLay[z] = new QVBoxLayout(alla[j]);
             VLay[z]->setSpacing(0);
             VLay[z]->setContentsMargins(0,0,0,0);
             tmpCol = ZwKol->get();
             VLay[z]->addWidget(tmpCol);
-            //VLay[z]->setStretchFactor(tmpCol,0);
             tmpCol = ZwKol->get();
             tmpCol->setStyleSheet("background-color: yellow");
             VLay[z]->addWidget(tmpCol);
-            //VLay[z]->setStretchFactor(tmpCol,0);
             z++;
-/*
-            kids = alla[j]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
-            if(!(kids.isEmpty()))
-            {
-                kids.at(1)->setStyleSheet("background-color: red");
-                kids.clear();
-            }
-*/
 
 
         }
@@ -105,20 +89,28 @@ void Widget::inizializza()
             tmpCol = ZwKol->get();
             tmpCol->setStyleSheet("background-color: yellow");
             VLay[z]->addWidget(tmpCol);
-            //VLay[z]->setStretchFactor(tmpCol,0);
             tmpCol = ZwKol->get();
             VLay[z]->addWidget(tmpCol);
-            //VLay[z]->setStretchFactor(tmpCol,0);
             z++;
         }
+        //<------------------
+
+        else if(IsInStos(j,SemStos,SEM))
+        {
+            //GTory->addWidget(sella[j],j/(LUNGHEZZA),i);
+            sella[j] = new Semafor(3);
+            GTory->addWidget(sella[j],j/(LUNGHEZZA),i);
+        }
+
+        //<-----------------
         GTory->addWidget(alla[j],j/(LUNGHEZZA),i);
+
         i++;
         if(i>=LUNGHEZZA)
         {
             i=0;
         }
     }
-
 
 //nastawianie koordow zwrotnic
     for(j=0;j<AZWROTNICE*LZWROTNICE;j++)
@@ -148,8 +140,9 @@ void Widget::inizializza()
         Semafory[j]->setText(ela);
         GBSemafory->addWidget(Semafory[j],j/(LSEMAFORY),i);
         connect(Semafory[j], SIGNAL(clicked()), SsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
-        //Needed to pass the value in order to distingush the coords at which the semafor is in the visualization
-        SsignalMapper->setMapping(Semafory[j], j); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
+        int temp = TrainCan->GetThat(j);
+        //Needed to pass the value in order to distingush the coords at which the TRAIN CAN BE in the visualization
+        SsignalMapper->setMapping(Semafory[j], temp); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
         i++;
         if(i>=LSEMAFORY)
         {
@@ -188,7 +181,6 @@ for(j=TRAIN/2;j<TRAIN;j++)
     GenTrain[j]->setObjectName(ela);
     GenTrain[j]->setText(ela);
     GenTrain[j]->setCheckable(true);
-    //VGenTrain->addWidget(GenTrain[j],j/(LZWROTNICE),i);
     VGenTrain[z]->addWidget(GenTrain[j]);
     connect(GenTrain[j], SIGNAL(toggled(bool)), GsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
     int temp = Generation->GetThat(j);
@@ -209,87 +201,19 @@ for(j=TRAIN/2;j<TRAIN;j++)
     MainLayout->setSpacing(0);
     MainLayout->addLayout(GTory);
     MainLayout->addLayout(HorizontalZwSemGen);
-    //GBZwrotnice->setSpacing(15);
-    //MainLayout->addLayout(GBZwrotnice);
-    //GBSemafory->setSpacing(15);
-    //MainLayout->addLayout(GBSemafory);
-/*
-    h = alla[0]->height();
-    w = alla[0]->width();
-    x = w/LUNGHEZZA;
-    y = h/ALTEZZA;
-    for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
-    {
-        rectangle = GTory->contentsRect();
-        qDebug("GTORY WIDHT: %d",rectangle.width());
-        qDebug("GTORY HEIGHT: %d",rectangle.height());
-        qDebug("GTORY X: %d",rectangle.x());
-        qDebug("GTORY Y: %d",rectangle.y());
-        if(inUp(j,ZwUpDw)==true)
-        {
-            int nx = j/LUNGHEZZA;
-            int ny = j - (LUNGHEZZA*nx);
-            int widt = rectangle.width()/LUNGHEZZA;
-            int heig = rectangle.height()/ALTEZZA;
-            qDebug("nx: %d",nx);
-            qDebug("ny: %d",ny);
-
-            alla[j]->setType(1);
-            ///----//
-            tmpCol = ZwKol->get();
-            tmpCol->setGeometry(nx*widt,ny*heig,widt,heig);
-            tmpCol->setParent(alla[j]);
-
-            tmpCol = ZwKol->get();
-            tmpCol->setGeometry(nx*widt,(ny*heig)+heig,widt,heig);
-            tmpCol->setParent(alla[j]);
-
-            QWidget* tmpW=alla[j]->childAt(x,(int)(j/LUNGHEZZA)*y);
-            tmpW->setStyleSheet("background-color: yellow");
-            tmpW=alla[j]->childAt(0,0);
-            tmpW->setStyleSheet("background-color: red");
-            //----//
-            //--//
-            kids = alla[j]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
-            if(!kids.empty)
-            {
-                kids.at(1)->setStyleSheet("background-color: yellow");
-                kids.clear();
-            }
-            //To reimplement in order to distinguish the WhereToLook of zwrotnica
-            //Distinguish between the two children of the label
-            //--//
-        }
-        else if(inDw(j,ZwUpDw)==true)
-        {
-            alla[j]->setType(2);
-            //--//h = alla[j]->width();
-            w = alla[j]->height();
-
-            tmpCol = ZwKol->get();
-            tmpCol->setGeometry(0,0,w,h/2);
-            tmpCol->setParent(alla[j]);
-
-            tmpCol = ZwKol->get();
-            tmpCol->setGeometry(0,h/2,w,h/2);
-            tmpCol->setParent(alla[j]);
-
-            QWidget* tmpW=alla[j]->childAt(0,0);
-            //tmpW->setStyleSheet("background-color: yellow");//---//
-        }
     }
-    */
-}
 
 void Widget::Train(int n)
 {
-    int WhatTrain = Generation->getpos(n);
+    int WhatTrain = Generation->getpos(n); //na ktorym indeksie powynien znajdywac sie pociag
+    //generation (tablicy koordow generacji pociagow) podpiete do gentrain (przyciski)
     temptor=alla[n];
     if(temptor->getITrain()==0)
     {
         Pociag::increment();
         Ciuf = CreateCiuf();
         temptor->setITrain();
+        Ciuf[WhatTrain].setCoords(n);
         temptor->setStyleSheet("background-color: blue");
         if(WhatTrain<TRAIN/2)
         {
@@ -300,7 +224,6 @@ void Widget::Train(int n)
         {
             Ciuf[WhatTrain].setDirection(1);
             TrasaReverse((n-1),'w',temptor->getITrain());
-            //ReverseTrasa
         }
     }
     //----Temporary code to verify the functionality of the reverse functions
@@ -340,7 +263,6 @@ void Widget::Trasa(int j, char kolor, int flg)
             // or if the straight function isn't gone a line down the display
             if((j%LUNGHEZZA)==0)
             {
-                //alla[j-1]->setITrain();
                 return;
             }
             else if(isIn(j,Perony))
@@ -417,8 +339,6 @@ void Widget::ZwChange(int n)
     //Starts where there is a train -> needed a class with a static member that return number of trains in the system
     Trasa(START+1,'w',alla[START]->getITrain());
     Zwrotnice[zwnum]->setDisabled(false);
-
-    //Verify the label's children and change color
 }
 
 void Widget::cleanAdjacent(int n, QString stile)
@@ -439,7 +359,6 @@ void Widget::cleanAdjacent(int n, QString stile)
                    clean(tmp2,stile);
                 }
             tmp2++;
-            //if(isIn(tmp2,Perony)||((tmp2%LUNGHEZZA)==0))
             if((tmp2%LUNGHEZZA)==0 || isIn(tmp2,Perony))
             {
                 break;
@@ -605,7 +524,6 @@ void Widget::TrasaReverse(int j, char kolor, int flg)
             // or if the straight function isn't gone a line down the display
             if(((j%LUNGHEZZA)==0)||isIn(j,Perony))
             {
-                //alla[j]->setITrain();
                 clean(j,tmpKol);
                 return;
             }
@@ -680,13 +598,6 @@ void Widget::TrainGone()
     temptor=alla[FINISH];
     if(temptor->getITrain()==1)
     {
-        //temptor->setITrain();
-        /*
-        {
-            temptor->setStyleSheet("background-color: blue");
-        }
-        */
-        //alla[START]->setITrain();
         cleanAdjacentReverse(FINISH,"background-color: grey");
         TrasaReverse((FINISH-1),'w',alla[START]->getITrain());
         temptor->setStyleSheet("background-color: blue");
@@ -710,8 +621,6 @@ void Widget::TrasaPociag(int n, QString kolor)
         // or if the straight function isn't gone a line down the display
         if((n%LUNGHEZZA)==0)
         {
-            //alla[n-1]->setITrain();
-            //aspetta->terminate();
             return;
         }
         if(isIn(n,Perony))
@@ -757,18 +666,16 @@ void Widget::TrasaPociag(int n, QString kolor)
 double Widget::trasaTime(int nrciuf,int nrtor)
 {
     double Tdlg=alla[nrtor]->getLen();
-    //double Pdlg=Ciuf->getDlg();
-    double Pvel=Ciuf->getPredkosc();
+    double Pvel=Ciuf[nrciuf].getPredkosc();
 
-    //double wynik = (Tdlg+Pdlg)/Pvel;
     double wynik = Tdlg/Pvel;
     return wynik;
 }
 
 double Widget::TrainTime(int nrciuf,int nrtor)
 {
-    double Pdlg=Ciuf->getDlg();
-    double Pvel=Ciuf->getPredkosc();
+    double Pdlg=Ciuf[nrciuf].getDlg();
+    double Pvel=Ciuf[nrciuf].getPredkosc();
 
     double wynik = Pdlg/Pvel;
     return wynik;
@@ -818,4 +725,50 @@ double secTOms(double sec)
          }
      }
      return false;
+ }
+
+ bool Widget::IsInStos(int j, Stos* pile, int roz)
+ {
+     int i;
+     for(i=0;i<roz;i++)
+     {
+         if(j==pile->GetThat(i))
+         {
+             return true;
+         }
+     }
+     return false;
+ }
+
+ void Widget::SemaforChanged(int n)
+ {
+     if(alla[n]->getITrain())
+     {
+         int trainnr = WhatTrainThere(n);
+         if(!(Ciuf[trainnr].getDirection()))
+         {
+             //TrasaPociag(n+1,"background color: green");
+         }
+         else
+         {
+             qDebug("Reverse Trasa");
+             //trasa
+         }
+     }
+     else
+     {
+         qDebug("Nie ma pociagu");
+     }
+ }
+
+ int Widget::WhatTrainThere(int n)
+ {
+     int i;
+     for(i=0;i<Pociag::Quanto;i++)
+     {
+         if((Ciuf[i].getCoords())==n)
+         {
+             return i;
+         }
+     }
  }

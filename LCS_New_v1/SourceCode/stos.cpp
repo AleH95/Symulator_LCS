@@ -50,16 +50,7 @@ int Stos::GetThat(int num)
     }
 
 }
-/*
-void Stos::operator = (const int cpy[])
-{
-    int i;
-    for(i=0;i<roz;i++)
-    {
-        tab[i]=cpy[i];
-    }
-}
-*/
+
 int Stos::getroz()
 {
     return roz;

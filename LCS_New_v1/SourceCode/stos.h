@@ -6,7 +6,6 @@
 class Stos
 {
 private:
-    //QString *tab;
     int *tab;
     int iter;
     int roz;

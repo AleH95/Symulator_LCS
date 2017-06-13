@@ -30,6 +30,8 @@
 
 #define TRAIN 4 //Ilosc punktow generujacych pociagi
 
+#define SEM 4 //Ilosc semaforow
+
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up
 #define DZW 1 //ilosc zwrotnicc typu Down

@@ -29,13 +29,15 @@ SOURCES += main.cpp\
     stos.cpp \
     color.cpp \
     pociag.cpp \
-    thread.cpp
+    thread.cpp \
+    semafor.cpp
 
 HEADERS  += Mainwidget.h \
     tor.h \
     stos.h \
     color.h \
     pociag.h \
-    thread.h
+    thread.h \
+    semafor.h
 
 FORMS    += widget.ui
