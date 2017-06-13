@@ -37,6 +37,7 @@ private:
     QVBoxLayout *MainLayout, *VGenTrain[TRAIN/2]; //Main Layout that is displayed (contains the other layaouts)
     QHBoxLayout *HorizontalZwSemGen;
     Tor *alla[ALTEZZA*LUNGHEZZA]; //Array of blocks for visual display (Tor+ZwrotnicaGorna/Dolna)
+    Semafor *sella[ALTEZZA*LUNGHEZZA];
     QPushButton* Zwrotnice[AZWROTNICE*LZWROTNICE]; //Array of buttons Zwrotnica
     QPushButton* Semafory[ASEMAFORY*LSEMAFORY]; //Array of Semafors Zwrotnica
     Tor *temptor; //Pointer for temporary value od Tor

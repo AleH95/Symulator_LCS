@@ -10,10 +10,10 @@ Widget::Widget(QWidget *parent) :
     //The table content is written as j where j = (Row*LUNGHEZZA ) + Column
     int tmpzw[UZW+DZW] = {8,11,12};
     int tmptrain[TRAIN] = {(5*LUNGHEZZA)+0,(6*LUNGHEZZA)+0,(5*LUNGHEZZA)+8,(6*LUNGHEZZA)+8};
-    int tmpsem[UZW+DZW] = {2,3};
+    int tmpsem[2] = {2,3};
     ZwKol = new Color(2*(UZW+DZW)); //Pod labele, do zmieniania koloru toru
     ZwUpDw = new Stos(UZW+DZW,tmpzw);
-    SemStos = new Stos(UZW+DZW,tmpsem);
+    SemStos = new Stos(2,tmpsem);
     Generation = new Stos(TRAIN,tmptrain);
     //The size of the main window
     setFixedSize(1280,600);
@@ -62,10 +62,11 @@ void Widget::inizializza()
     for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
     {
         alla[j] = new Tor(0,100,0);
+
         //variable storing the coordinants on the display of a button
         QString ela = "T"+QString::number(j/(LUNGHEZZA))+QString::number(i);
         alla[j]->setText(ela);
-        alla[j]->setStyleSheet("background-color: grey");
+        //alla[j]->setStyleSheet("background-color: grey");
         if(inUp(j,ZwUpDw)==true)
         {
 
