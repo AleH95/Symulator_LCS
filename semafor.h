@@ -5,35 +5,27 @@
 #include <QLabel>
 
 
-//--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
-#define UZW 2 //ilosc zwrotnic typu Up
-#define DZW 1 //ilosc zwrotnicc typu Down
-
-//Klasa do obslugi semafora :
-//    0.zielone
-//    1.żółte
-//    2.czerwone
-
 class Semafor: public QLabel
 {
 private:
+    int rozmiar;
+    QLabel *semafory;
+    QLabel *MainLab;
+    QLabel *Lab2;
+    QLabel *Lab3;
+    //Color *kolory;
+    int myColor;
 
-    int TrainWaiting;
-    int SemLightColor;
 public:
     Semafor();
-    Semafor(int iW);
-
+    Semafor(int num); //rozmiar tablicy
 
 public slots:
-    //Nastawienie parametrow klasy
-    void setLight();
+    QLabel setColor(int numer);
 
-
-    //Zwracanie parametrow klasy
-    int getLight();
-
+    int getColor();
 
 };
+
 
 #endif // SEMAFOR_H

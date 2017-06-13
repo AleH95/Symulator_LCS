@@ -10,7 +10,6 @@
 #define STRAIGHT "Straight"
 #define UP "Up"
 #define DOWN "Down"
-#define STRAIGHT_SEM "Semafor"
 
 #define LZWROTNICE 3 //Ilosc przyciskow zwrotnic w poziomie
 #define AZWROTNICE 1 //Ilosc przyciskow zwrotnic w pionie
@@ -21,7 +20,11 @@
 #define STARTX 0 //Pozycja pozioma Pojawiania sie pociagu
 #define STARTY 2 //Pozycja pionowa Pojawiania sie pociagu
 
+#define FINISHX 4
+#define FINISHY 2
+
 #define START (STARTY*LUNGHEZZA)+STARTX //Coords 2,0 = 0*LUNGHEZZA+2
+#define FINISH (FINISHY*LUNGHEZZA)+FINISHX
 
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up
@@ -36,12 +39,11 @@ class Tor: public QLabel
 {
 private:
     QString WhereTLook;
+    QString From;
     //char* Direction; <- raczej do pociagu (pociag sie pojawia i w ktora strone ma jechac)
     int IsTrain;
     int Length;
     int Type; //0=Tor, 1=ZwrotnicaGorna, 2=ZwrotnicaDolna
-    int isSemafor;
-    int SemLightColor;
 public:
     Tor();
     Tor(int iT, int len, int typ);
@@ -52,12 +54,13 @@ public slots:
     void setITrain();
     void setLen(int num);
     void setType(int num);
+    void setFrom(QString string);
     //Zwracanie parametrow klasy
     QString getWTL();
     int getITrain();
     int getLen();
     int getType();
-
+    QString getFrom();
 };
 
 #endif // TOR_H

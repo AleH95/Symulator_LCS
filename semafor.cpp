@@ -1,62 +1,50 @@
 #include "semafor.h"
-#include "Mainwidget.h"
+#include <QLabel>
 
-Semafor::Semafor(int iW):
-    myLab(myLabel)
+Semafor::Semafor(int num)
 {
-   SemLightColor = 0;
+
+
+    int myColor = num;
+
+    QLabel* MainLab = new QLabel(this);
+    QLabel* Lab2 = new QLabel(MainLab);
+    QLabel* Lab3 = new QLabel(MainLab);
+
+    //MainLab->setStyleSheet("background-color:orange");
+        MainLab->setGeometry(QRect(0,0,30,15));
+        //Lab2->setStyleSheet("background-color:red");
+        Lab2->setGeometry(QRect(0,0,15,30));
+        //Lab3->setStyleSheet("background-color:orange");
+        Lab3->setGeometry(QRect(15,0,30,15));
+
+        //ustawienie poczatkowego stanu semafora
+        Lab2->setStyleSheet("background-color:red");
+        Lab3->setStyleSheet("background-color:white");
+
+
 }
 
-
-
-void Semafor::setLight(int num, QLabel *semafory, Color *kolory)
+QLabel Semafor::setColor(int numer)
 {
-    SemLightColor = num ;
-    kolory Colors = new kolory(this);
-
-
-    switch(SemLightColor)
+    myColor = numer;
+    if(myColor == 0)
     {
-        case 1:
-            // ustaw czerwony
-
-        case 2:
-            // ustaw zielony
+        Lab2->setStyleSheet("background-color:red");
+        Lab3->setStyleSheet("background-color:white");
     }
-
+    else if(myColor == 1)
+    {
+        Lab2->setStyleSheet("background-color:white");
+        Lab3->setStyleSheet("background-color:green");
+    }
 }
 
 
 
-
-
-
-
-    QList <Color*> kids = alla[j]->findChildren<Color*>(QString(), Qt::FindDirectChildrenOnly);
-                if(!(kids.isEmpty()))
-                {
-                    kids.at(1)->setStyleSheet("background-color: red");
-                    kids.clear();
-                }
-
-             /*
-                alla[j]->setType(1);
-                            VLay[z] = new QVBoxLayout(alla[j]);
-                            VLay[z]->setSpacing(0);
-                            VLay[z]->setContentsMargins(0,0,0,0);
-                            tmpCol = ZwKol->get();
-                            VLay[z]->addWidget(tmpCol);
-                ZwKol = new Color(2*(UZW+DZW));
-
-                */
-
-
-
-
-
-int Semafor::getLight()
+int Semafor::getColor()
 {
-    return SemLightColor;
+    return myColor;
 }
 
 

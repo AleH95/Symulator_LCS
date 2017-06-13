@@ -27,11 +27,13 @@ SOURCES += main.cpp\
         Mainwidget.cpp \
     tor.cpp \
     stos.cpp \
+    color.cpp \
     semafor.cpp
 
 HEADERS  += Mainwidget.h \
     tor.h \
     stos.h \
+    color.h \
     semafor.h
 
 FORMS    += widget.ui

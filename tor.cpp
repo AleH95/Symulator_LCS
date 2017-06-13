@@ -8,6 +8,7 @@ Tor::Tor(int iT, int len, int typ) :
     strcpy(WhereTLook,STRAIGHT);
     */
     WhereTLook=STRAIGHT;
+    From=STRAIGHT;
 }
 
 void Tor::setWTL()
@@ -34,7 +35,6 @@ void Tor::setWTL()
             return;
         }
     }
-
     WhereTLook=STRAIGHT;
 }
 
@@ -60,10 +60,10 @@ void Tor::setType(int num)
     Type = num;
 }
 
-
-
-
-
+void Tor::setFrom(QString string)
+{
+    From = string;
+}
 
 QString Tor::getWTL()
 {
@@ -83,4 +83,9 @@ int Tor::getLen()
 int Tor::getType()
 {
     return Type;
+}
+
+QString Tor::getFrom()
+{
+    return From;
 }
