@@ -4,8 +4,8 @@
 #include <QWidget>
 #include <QLabel>
 
-#define LUNGHEZZA 5 //Ilosc torow w poziomie
-#define ALTEZZA 5 //Ilosc torow w pionie
+#define LUNGHEZZA 29 //Ilosc torow w poziomie
+#define ALTEZZA 10 //Ilosc torow w pionie
 
 #define STRAIGHT "Straight"
 #define UP "Up"
@@ -17,6 +17,8 @@
 #define LSEMAFORY 2 //Ilosc przyciskow semaforow w poziomie
 #define ASEMAFORY 2 //Ilosc przyciskow semaforow w pioni
 
+#define PERON 16 //Na ktorej kolumnje sie znajduej Peron (po ilu bloczkach)
+
 #define STARTX 0 //Pozycja pozioma Pojawiania sie pociagu
 #define STARTY 2 //Pozycja pionowa Pojawiania sie pociagu
 
@@ -25,6 +27,8 @@
 
 #define START (STARTY*LUNGHEZZA)+STARTX //Coords 2,0 = 0*LUNGHEZZA+2
 #define FINISH (FINISHY*LUNGHEZZA)+FINISHX
+
+#define TRAIN 4 //Ilosc punktow generujacych pociagi
 
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up
@@ -42,7 +46,7 @@ private:
     QString From;
     //char* Direction; <- raczej do pociagu (pociag sie pojawia i w ktora strone ma jechac)
     int IsTrain;
-    int Length;
+    double Length;
     int Type; //0=Tor, 1=ZwrotnicaGorna, 2=ZwrotnicaDolna
 public:
     Tor();
@@ -52,13 +56,13 @@ public slots:
     //Nastawienie parametrow klasy
     void setWTL();
     void setITrain();
-    void setLen(int num);
+    void setLen(double num);
     void setType(int num);
     void setFrom(QString string);
     //Zwracanie parametrow klasy
     QString getWTL();
     int getITrain();
-    int getLen();
+    double getLen();
     int getType();
     QString getFrom();
 };

@@ -50,7 +50,7 @@ void Tor::setITrain()
     }
 }
 
-void Tor::setLen(int num)
+void Tor::setLen(double num)
 {
     Length = num;
 }
@@ -75,7 +75,7 @@ int Tor::getITrain()
     return IsTrain;
 }
 
-int Tor::getLen()
+double Tor::getLen()
 {
     return Length;
 }
