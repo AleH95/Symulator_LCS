@@ -2,9 +2,12 @@
 Symulator sterowania urzadzeniami stacyjnymi/posterunkowymi
 
 Podzial pracy:
-1) Przyciski - oprogramowanie i wisualizacja
-    - Hebda Aleksander
-    - Baryczka Maksymilian    
-2) Wisualizacja torow
+1) Oprogramowanie i wisualizacja
     - Dyja Christopher
-    - Bysiel Rafal
+    - Hebda Aleksander
+2) Wisualizacja torow
+    - Sasko Kuba
+3) Pozostale funkcjonalnosci
+    - Baryczka Maksymilian
+    - Bysiek Rafal
+    
