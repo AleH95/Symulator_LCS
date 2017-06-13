@@ -1,6 +1,6 @@
 #include "Mainwidget.h"
 #include "ui_widget.h"
-
+#include "thread.h"
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -9,21 +9,24 @@ Widget::Widget(QWidget *parent) :
     //Temporary table of zwrotnice Gorne and Dolne, it'll be written to Stos
     //The table content is written as j where j = (Row*LUNGHEZZA ) + Column
     int tmpzw[UZW+DZW] = {8,11,12};
-    ZwKol = new Color(2*(UZW+DZW));
+    int tmptrain[TRAIN] = {(5*LUNGHEZZA)+0,(6*LUNGHEZZA)+0,(5*LUNGHEZZA)+8,(6*LUNGHEZZA)+8};
+    ZwKol = new Color(2*(UZW+DZW)); //Pod labele, do zmieniania koloru toru
     ZwUpDw = new Stos(UZW+DZW,tmpzw);
+    Generation = new Stos(TRAIN,tmptrain);
     //The size of the main window
     setFixedSize(1280,600);
-    GenTrain = new QPushButton(this);
-    TrainArrived = new QPushButton(this);
-    GenTrain->setText("START");
-    TrainArrived->setText("GONE");
-    TrainArrived->setGeometry(GenTrain->width(),0,GenTrain->width(),GenTrain->height());
+    //GenTrain = new QPushButton(this);
+    //TrainArrived = new QPushButton(this);
+    //GenTrain->setText("START");
+    //TrainArrived->setText("GONE");
+    //TrainArrived->setGeometry(GenTrain->width(),0,GenTrain->width(),GenTrain->height());
 
     ZsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
     SsignalMapper = new QSignalMapper(this); //tworzenie signal mapper
+    GsignalMapper = new QSignalMapper(this);
 
-    connect( GenTrain,SIGNAL(clicked(bool)),this,SLOT(Train()) );
-    connect( TrainArrived,SIGNAL(clicked(bool)),this,SLOT(TrainGone()) );
+    //connect( GenTrain,SIGNAL(clicked(bool)),this,SLOT(Train()) );
+    //connect( TrainArrived,SIGNAL(clicked(bool)),this,SLOT(TrainGone()) );
     connect(ZsignalMapper, SIGNAL(mapped(int)),this,SLOT(ZwChange(int))); //Zwrotnica signal mapper -> to implement slot handling zwrotnica's state change
     //Also the visualization of this change
     //connect(SsignalMapper, SIGNAL(mapped(int)),this,SLOT(); //Zwrotnica signal mapper -> to implement slot handling semafor's confirmation
@@ -49,9 +52,11 @@ void Widget::inizializza()
     //int x,y; //Coordinants of Tor
     MainLayout = new QVBoxLayout(this);
     GTory = new QGridLayout();
+    //VGenTrain = new QVBoxLayout();
+    HorizontalZwSemGen = new QHBoxLayout();
     GBZwrotnice = new QGridLayout();
     GBSemafory = new QGridLayout();
-
+//generowanie gridu
     for(j=0;j<ALTEZZA*LUNGHEZZA;j++)
     {
         alla[j] = new Tor(0,100,0);
@@ -109,7 +114,7 @@ void Widget::inizializza()
     }
 
 
-
+//nastawianie koordow zwrotnic
     for(j=0;j<AZWROTNICE*LZWROTNICE;j++)
     {
         Zwrotnice[j] = new QPushButton();
@@ -128,7 +133,7 @@ void Widget::inizializza()
             i=0;
         }
     }
-
+//nastawianie koordow semaforow
     for(j=0;j<ASEMAFORY*LSEMAFORY;j++)
     {
         Semafory[j] = new QPushButton();
@@ -145,13 +150,63 @@ void Widget::inizializza()
             i=0;
         }
     }
+z=0;
+VGenTrain[z] = new QVBoxLayout();
+ //nastawienie koordow generowania pociagow
+    for(j=0;j<TRAIN/2;j++)
+    {
+        GenTrain[j] = new QPushButton();
+        QString ela = "G"+QString::number(j/(LZWROTNICE))+QString::number(i);
+        GenTrain[j]->setObjectName(ela);
+        GenTrain[j]->setText(ela);
+        GenTrain[j]->setCheckable(true);
+        //VGenTrain->addWidget(GenTrain[j],j/(LZWROTNICE),i);
+        VGenTrain[z]->addWidget(GenTrain[j]);
+        connect(Zwrotnice[j], SIGNAL(toggled(bool)), GsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
+        int temp = Generation->GetThat(j);
+        GsignalMapper->setMapping(GenTrain[j], temp); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
+        //passing j that stores the coords of where to find the zwrotnica
+        i++;
+        if(i>=LZWROTNICE)
+        {
+            i=0;
+        }
+    }
+    HorizontalZwSemGen->addLayout(VGenTrain[z]);
+z++;
+VGenTrain[z] = new QVBoxLayout();
+for(j=TRAIN/2;j<TRAIN;j++)
+{
+    GenTrain[j] = new QPushButton();
+    QString ela = "G"+QString::number(j/(LZWROTNICE))+QString::number(i);
+    GenTrain[j]->setObjectName(ela);
+    GenTrain[j]->setText(ela);
+    GenTrain[j]->setCheckable(true);
+    //VGenTrain->addWidget(GenTrain[j],j/(LZWROTNICE),i);
+    VGenTrain[z]->addWidget(GenTrain[j]);
+    connect(Zwrotnice[j], SIGNAL(toggled(bool)), GsignalMapper, SLOT(map())); //polaczenie signalu zwrotnicy do signalmapper
+    int temp = Generation->GetThat(j);
+    GsignalMapper->setMapping(GenTrain[j], temp); //nastawianie parametru wedlug ktorego signalmapper rozpoznaje wcisniety przycisk
+    //passing j that stores the coords of where to find the zwrotnica
+    i++;
+    if(i>=LZWROTNICE)
+    {
+        i=0;
+    }
+}
 
+    HorizontalZwSemGen->addLayout(GBZwrotnice);
+    GBZwrotnice->setSpacing(15);
+    HorizontalZwSemGen->addLayout(GBSemafory);
+    GBSemafory->setSpacing(15);
+    HorizontalZwSemGen->addLayout(VGenTrain[z]);
     MainLayout->setSpacing(0);
     MainLayout->addLayout(GTory);
-    GBZwrotnice->setSpacing(15);
-    MainLayout->addLayout(GBZwrotnice);
-    GBSemafory->setSpacing(15);
-    MainLayout->addLayout(GBSemafory);
+    MainLayout->addLayout(HorizontalZwSemGen);
+    //GBZwrotnice->setSpacing(15);
+    //MainLayout->addLayout(GBZwrotnice);
+    //GBSemafory->setSpacing(15);
+    //MainLayout->addLayout(GBSemafory);
 /*
     h = alla[0]->height();
     w = alla[0]->width();
@@ -627,54 +682,75 @@ void Widget::TrainGone()
     }
 }
 
-void Widget::TrasaPociag(int n)
+//przekazac tor c+1, gdzie c to blok na ktory wyjezdza pociag
+void Widget::TrasaPociag(int n, QString kolor)
 {
-    /*
-    QString tmpWTL = alla[j]->getWTL();
-    if(j>(ALTEZZA*LUNGHEZZA)||(j<0))
+    WThread* aspetta = new WThread;
+    QString tmpWTL = alla[n]->getWTL();
+    int TimeNextTor;
+    int TimeLeaveTor;
+    if(n>(ALTEZZA*LUNGHEZZA)||(n<0))
     {
         return;
     }
     if(tmpWTL==STRAIGHT)
     {
-        //Verifying of the variable j isn't out of range,
+        //Verifying of the variable n isn't out of range,
         // or if the straight function isn't gone a line down the display
-        if((j%LUNGHEZZA)==0)
+        if((n%LUNGHEZZA)==0)
         {
-            //alla[j-1]->setITrain();
+            //alla[n-1]->setITrain();
+            //aspetta->terminate();
             return;
         }
-        if((j%PERON)==0)
+        if((n%PERON)==0)
         {
-            alla[j]->setITrain();
+            alla[n]->setITrain();
+            //aspetta->terminate();
+            return;
         }
-        alla[j]->Length();
-        clean(j,tmpKol);
-        j++;
-        Trasa(j,kolor,flg);
+        TimeNextTor = trasaTime(1,n);
+        TimeLeaveTor = TrainTime(1,n);
+        clean(n,kolor);
+        QThread::sleep(TimeNextTor);
+        aspetta->start(n,TimeLeaveTor,this);
+        n++;
+        TrasaPociag(n,kolor);
+        //aspetta->terminate();
     }
     else if(tmpWTL==UP)
     {
-        clean(j,tmpKol);
-        j=j-LUNGHEZZA;
-        Trasa(j,kolor,flg);
+        TimeNextTor = trasaTime(1,n);
+        TimeLeaveTor = TrainTime(1,n);
+        clean(n,kolor);
+        QThread::sleep(TimeNextTor);
+        aspetta->start(n,TimeLeaveTor,this);
+        n=n-LUNGHEZZA;
+        TrasaPociag(n,kolor);
+        //aspetta->terminate();
     }
     else if(tmpWTL==DOWN)
     {
-        clean(j,tmpKol);
-        j=j+LUNGHEZZA;
-        Trasa(j,kolor,flg);
+        TimeNextTor = trasaTime(1,n);
+        TimeLeaveTor = TrainTime(1,n);
+        clean(n,kolor);
+        QThread::sleep(TimeNextTor);
+        aspetta->start(n,TimeLeaveTor,this);
+        n=n+LUNGHEZZA;
+        TrasaPociag(n,kolor);
+        //aspetta->terminate();
     }
-    */
+
 }
 
 double Widget::trasaTime(int nrciuf,int nrtor)
 {
     double Tdlg=alla[nrtor]->getLen();
-    double Pdlg=Ciuf->getDlg();
+    //double Pdlg=Ciuf->getDlg();
     double Pvel=Ciuf->getPredkosc();
 
-    double wynik = (Tdlg+Pdlg)/Pvel;
+    //double wynik = (Tdlg+Pdlg)/Pvel;
+    double wynik = Tdlg/Pvel;
     return wynik;
 }
 
@@ -691,8 +767,9 @@ double Widget::kmhTOms(double vel)
 {
     return (vel*3.6);
 }
-
+/*
 double secTOms(double sec)
 {
     return (sec*1000);
 }
+*/

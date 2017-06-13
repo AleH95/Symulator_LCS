@@ -28,6 +28,8 @@
 #define START (STARTY*LUNGHEZZA)+STARTX //Coords 2,0 = 0*LUNGHEZZA+2
 #define FINISH (FINISHY*LUNGHEZZA)+FINISHX
 
+#define TRAIN 4 //Ilosc punktow generujacych pociagi
+
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up
 #define DZW 1 //ilosc zwrotnicc typu Down
