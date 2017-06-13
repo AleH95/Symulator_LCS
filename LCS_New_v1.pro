@@ -41,3 +41,8 @@ HEADERS  += Mainwidget.h \
     semafor.h
 
 FORMS    += widget.ui
+
+DISTFILES += \
+
+
+

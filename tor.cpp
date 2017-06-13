@@ -3,22 +3,12 @@
 Tor::Tor(int iT, int len, int typ) :
         IsTrain(iT), Length(len), Type(typ)
 {
-    /*
-    WhereTLook = new char[strlen(STRAIGHT)];
-    strcpy(WhereTLook,STRAIGHT);
-    */
     WhereTLook=STRAIGHT;
     From=STRAIGHT;
 }
 
 void Tor::setWTL()
 {
-    /*
-    delete[] WhereTLook;
-    WhereTLook = 0;
-    WhereTLook = new char[strlen(string)];
-    strcpy(WhereTLook,string);
-    */
     if(Type==1)
     {
         if(WhereTLook==STRAIGHT)

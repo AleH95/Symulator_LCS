@@ -14,7 +14,6 @@
 #include "color.h"
 #include "pociag.h"
 #include "semafor.h"
-//#include "thread.h"
 
 namespace Ui {
 class Widget;
@@ -37,7 +36,7 @@ private:
     QVBoxLayout *MainLayout, *VGenTrain[TRAIN/2]; //Main Layout that is displayed (contains the other layaouts)
     QHBoxLayout *HorizontalZwSemGen;
     Tor *alla[ALTEZZA*LUNGHEZZA]; //Array of blocks for visual display (Tor+ZwrotnicaGorna/Dolna)
-    Semafor *sella[ALTEZZA*LUNGHEZZA];
+    Semafor *sella[ALTEZZA*LUNGHEZZA]; //<--------------
     QPushButton* Zwrotnice[AZWROTNICE*LZWROTNICE]; //Array of buttons Zwrotnica
     QPushButton* Semafory[ASEMAFORY*LSEMAFORY]; //Array of Semafors Zwrotnica
     Tor *temptor; //Pointer for temporary value od Tor
@@ -48,15 +47,30 @@ private:
     QSignalMapper *ZsignalMapper,*SsignalMapper,*GsignalMapper; //Signal mappers for Zwrotnice and Semafory
     Stos *ZwUpDw; //Klass Stos containing all the Coords where to find Zwrotnice on the Visualization
     Stos *Generation; //Klasa containing coords of where the trains will be generated
-    Stos *SemStos;
+    Stos *SemStos; //<--------
+    //__________________________________________________________________________________
+    Stos *RailroadS;
+    Stos *RailroadO;
+    Stos *Raillg;
+    Stos *Railpg;
+    Stos *Railld;
+    Stos *Railpd;
+    Stos *Raillgz;
+    Stos *Railpgz;
+    Stos *Railldz;
+    Stos *Railpdz;
+    //__________________________________________________________________________________
     Color *ZwKol;
     QVBoxLayout* VLay[UZW+DZW];
     QList <Color *> kids;
     Pociag *Ciuf;
+    int Perony[ALTEZZA];
+    Stos *TrainCan;
+
 
 
 public slots:
-    void Train(); //Generates Train
+    void Train(int n); //Generates Train
     void Trasa(int j, char kolor, int flg); //Visual rapresentation of the path the train will go on
     void TrasaReverse(int j, char kolor, int flg);
     bool inUp(int num,Stos* tab); //Function comparing if the Tor's j-th element is a Zwrotnica Gorna
@@ -72,6 +86,12 @@ public slots:
     double trasaTime(int nrciuf,int nrtor);
     double TrainTime(int nrciuf,int nrtor);
     double kmhTOms(double vel);
+    void WherePerony();
+    bool isIn(int j, int* tab);
+    Pociag* CreateCiuf();
+    bool IsInStos(int j, Stos* pile, int roz);
+    void SemaforChanged(int n);
+    int WhatTrainThere(int n);
     //double secTOms(double sec);
     //Needed also:
         //TrasaReset() -> seting the illumination of the position of the zwrotnica and discarding all other illumination

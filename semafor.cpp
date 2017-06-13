@@ -3,18 +3,28 @@
 
 Semafor::Semafor(int num)
 {
+    myColor = num;
 
+    //SemaforLab = new QLabel(this);
+    SemRed = new QLabel();
+    SemOrange = new QLabel();
+    SemYellow = new QLabel();
+    SemGreen = new QLabel();
+    SemBlue = new QLabel();
 
-    int myColor = num;
+    box = new QHBoxLayout(this);
+    box->setSpacing(0);
 
-    QLabel* SemaforLab = new QLabel(this);
-    QLabel* SemRed = new QLabel(SemaforLab);
-    QLabel* SemOrange = new QLabel(SemaforLab);
-    QLabel* SemYellow = new QLabel(SemaforLab);
-    QLabel* SemGreen = new QLabel(SemaforLab);
-    QLabel* SemBlue = new QLabel(SemaforLab);
+    box->addWidget(SemRed);
+    //SemRed->setStyleSheet("border-image:url(E:/Qt/Moje_projekty/LCS_V4/Symulator_LCS-ver1-Prototyp-Stacji/LCS_New_v1/SourceCode/semafor.png);");
+    box->addWidget(SemOrange);
+    box->addWidget(SemYellow);
+    box->addWidget(SemGreen);
+    box->addWidget(SemBlue);
+
 
     //MainLab->setStyleSheet("background-color:orange");
+    /*
         SemaforLab->setGeometry(QRect(0,0,75,15));
         SemaforLab->setStyleSheet("background-color:white");
         SemRed->setGeometry(QRect(0,0,15,30));
@@ -22,14 +32,13 @@ Semafor::Semafor(int num)
         SemYellow->setGeometry(QRect(30,0,30,15));
         SemGreen->setGeometry(QRect(45,0,30,15));
         SemBlue->setGeometry(QRect(60,0,30,15));
+        */
 
-        //ustawienie poczatkowego stanu semafora
-        SemRed->setStyleSheet("background-color:red");
-
-
+        //ustawienie poczatkowego stanu semaforu
+    setColor(myColor);
 }
 
-QLabel Semafor::setColor(int numer)
+void Semafor::setColor(int numer)
 {
     myColor = numer;
     if(myColor == 0)

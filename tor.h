@@ -4,7 +4,21 @@
 #include <QWidget>
 #include <QLabel>
 
-#define LUNGHEZZA 29 //Ilosc torow w poziomie
+//__________________________________________________________________________________
+#define RAILROADS 108
+#define RAILROADO 46
+#define RAILLG 13
+#define RAILPG 13
+#define RAILLD 10
+#define RAILPD 10
+
+#define RAILLGZ 5
+#define RAILPGZ 5
+#define RAILLDZ 8
+#define RAILPDZ 8
+//__________________________________________________________________________________
+
+#define LUNGHEZZA 35 //Ilosc torow w poziomie
 #define ALTEZZA 10 //Ilosc torow w pionie
 
 #define STRAIGHT "Straight"
@@ -17,7 +31,7 @@
 #define LSEMAFORY 2 //Ilosc przyciskow semaforow w poziomie
 #define ASEMAFORY 2 //Ilosc przyciskow semaforow w pioni
 
-#define PERON 15 //Na ktorej kolumnje sie znajduej Peron (po ilu bloczkach)
+#define PERON 16 //Na ktorej kolumnje sie znajduej Peron (po ilu bloczkach)
 
 #define STARTX 0 //Pozycja pozioma Pojawiania sie pociagu
 #define STARTY 2 //Pozycja pionowa Pojawiania sie pociagu
@@ -29,6 +43,8 @@
 #define FINISH (FINISHY*LUNGHEZZA)+FINISHX
 
 #define TRAIN 4 //Ilosc punktow generujacych pociagi
+
+#define SEM 4 //Ilosc semaforow
 
 //--------UWAGA: N+M musi byc rowne AZWROTNICE*LZWROTNICE!!-------
 #define UZW 2 //ilosc zwrotnic typu Up
