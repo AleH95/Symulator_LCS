@@ -5,36 +5,64 @@ Semafor::Semafor(int num)
 {
     myColor = num;
 
-    //SemaforLab = new QLabel(this);
-    SemRed = new QLabel();
-    SemOrange = new QLabel();
-    SemYellow = new QLabel();
-    SemGreen = new QLabel();
-    SemBlue = new QLabel();
+    SemRed = new QLabel(this);
+    SemOrange = new QLabel(this);
+    SemYellow = new QLabel(this);
+    SemGreen = new QLabel(this);
+    SemBlue = new QLabel(this);
+    box = NULL;
 
-    box = new QHBoxLayout(this);
-    box->setSpacing(0);
+    SemRed->setGeometry(QRect(0,0,15,30));
+    SemOrange->setGeometry(QRect(15,0,30,15));
+    SemYellow->setGeometry(QRect(30,0,30,15));
+    SemGreen->setGeometry(QRect(45,0,30,15));
+    SemBlue->setGeometry(QRect(60,0,30,15));
+    //box = new QHBoxLayout(this);
+    //box->setSpacing(0);
 
+    /*
     box->addWidget(SemRed);
     box->addWidget(SemOrange);
     box->addWidget(SemYellow);
     box->addWidget(SemGreen);
     box->addWidget(SemBlue);
+    */
 
-
-    //MainLab->setStyleSheet("background-color:orange");
-    /*
-        SemaforLab->setGeometry(QRect(0,0,75,15));
-        SemaforLab->setStyleSheet("background-color:white");
-        SemRed->setGeometry(QRect(0,0,15,30));
-        SemOrange->setGeometry(QRect(15,0,30,15));
-        SemYellow->setGeometry(QRect(30,0,30,15));
-        SemGreen->setGeometry(QRect(45,0,30,15));
-        SemBlue->setGeometry(QRect(60,0,30,15));
-        */
-
-        //ustawienie poczatkowego stanu semaforu
     setColor(myColor);
+}
+
+Semafor::~Semafor()
+{
+    if(SemRed!=NULL)
+    {
+        delete SemRed;
+        SemRed=NULL;
+    }
+    if(SemOrange!=NULL)
+    {
+        delete SemOrange;
+        SemOrange=NULL;
+    }
+    if(SemYellow!=NULL)
+    {
+        delete SemYellow;
+        SemYellow=NULL;
+    }
+    if(SemGreen!=NULL)
+    {
+        delete SemGreen;
+        SemGreen=NULL;
+    }
+    if(SemBlue!=NULL)
+    {
+        delete SemBlue;
+        SemBlue=NULL;
+    }
+    if(box!=NULL)
+    {
+        delete box;
+        box=NULL;
+    }
 }
 
 void Semafor::setColor(int numer)
@@ -42,46 +70,46 @@ void Semafor::setColor(int numer)
     myColor = numer;
     if(myColor == 0)
     {
-        SemRed->setStyleSheet("background-color:red");
-        SemOrange->setStyleSheet("background-color:white");
-        SemYellow->setStyleSheet("background-color:white");
-        SemGreen->setStyleSheet("background-color:white");
-        SemBlue->setStyleSheet("background-color:white");
+        SemRed->setStyleSheet("background-color: grey");
+        SemOrange->setStyleSheet("background-color:grey");
+        SemYellow->setStyleSheet("background-color:red");
+        SemGreen->setStyleSheet("background-color:grey");
+        SemBlue->setStyleSheet("background-color:grey");
 
 
     }
     else if(myColor == 1)
     {
-        SemRed->setStyleSheet("background-color:white");
+        SemRed->setStyleSheet("background-color:grey");
         SemOrange->setStyleSheet("background-color:orange");
-        SemYellow->setStyleSheet("background-color:white");
-        SemGreen->setStyleSheet("background-color:white");
-        SemBlue->setStyleSheet("background-color:white");
+        SemYellow->setStyleSheet("background-color:grey");
+        SemGreen->setStyleSheet("background-color:orange");
+        SemBlue->setStyleSheet("background-color:grey");
     }
 
     else if(myColor == 2)
     {
-        SemRed->setStyleSheet("background-color:white");
-        SemOrange->setStyleSheet("background-color:white");
-        SemYellow->setStyleSheet("background-color:yellow");
-        SemGreen->setStyleSheet("background-color:white");
-        SemBlue->setStyleSheet("background-color:white");
+        SemRed->setStyleSheet("background-color:grey");
+        SemOrange->setStyleSheet("background-color:orange");
+        SemYellow->setStyleSheet("background-color:grey");
+        SemGreen->setStyleSheet("background-color:orange");
+        SemBlue->setStyleSheet("background-color:grey");
     }
     else if(myColor == 3)
     {
-        SemRed->setStyleSheet("background-color:white");
-        SemOrange->setStyleSheet("background-color:white");
-        SemYellow->setStyleSheet("background-color:white");
-        SemGreen->setStyleSheet("background-color:green");
-        SemBlue->setStyleSheet("background-color:white");
+        SemRed->setStyleSheet("background-color:green");
+        SemOrange->setStyleSheet("background-color:grey");
+        SemYellow->setStyleSheet("background-color:grey");
+        SemGreen->setStyleSheet("background-color:orange");
+        SemBlue->setStyleSheet("background-color:grey");
     }
     else if(myColor == 4)
     {
-        SemRed->setStyleSheet("background-color:white");
-        SemOrange->setStyleSheet("background-color:white");
-        SemYellow->setStyleSheet("background-color:white");
-        SemGreen->setStyleSheet("background-color:white");
-        SemBlue->setStyleSheet("background-color:blue");
+        SemRed->setStyleSheet("background-color:green");
+        SemOrange->setStyleSheet("background-color:grey");
+        SemYellow->setStyleSheet("background-color:grey");
+        SemGreen->setStyleSheet("background-color:grey");
+        SemBlue->setStyleSheet("background-color:grey");
     }
 }
 
@@ -95,4 +123,7 @@ int Semafor::getColor()
     return myColor;
 }
 
-
+QHBoxLayout* Semafor::getlayout()
+{
+    return box;
+}

@@ -38,6 +38,8 @@ HEADERS  += Mainwidget.h \
     color.h \
     pociag.h \
     thread.h \
-    semafor.h
+    semafor.h \
+    macros.h \
+    myheaders.h
 
 FORMS    += widget.ui

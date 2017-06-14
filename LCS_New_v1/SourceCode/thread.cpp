@@ -19,4 +19,7 @@ void WThread::run()
     sleep(time);
     window->alla[nrtor]->setITrain();
     window->clean(nrtor,stile);
+    //emit counterReached(nrtor,stile);
+    exec();
+    //quit();
 }

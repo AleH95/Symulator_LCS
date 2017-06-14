@@ -5,6 +5,15 @@ Color::Color()
 
 }
 
+Color::~Color()
+{
+    if(ctab!=NULL)
+    {
+        delete[] ctab;
+        ctab=NULL;
+    }
+}
+
 Color::Color(int num)
 {
     citer=0;
@@ -29,7 +38,7 @@ QLabel* Color::getThat(int num)
 {
     if(num>=croz || num<0)
     {
-        return (ctab+0);
+        return NULL;
     }
     else
     {

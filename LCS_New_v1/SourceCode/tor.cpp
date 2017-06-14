@@ -3,13 +3,14 @@
 Tor::Tor(int iT, int len, int typ) :
         IsTrain(iT), Length(len), Type(typ)
 {
-    WhereTLook=STRAIGHT;
-    From=STRAIGHT;
+    WhereTLook=STRAIGHT;    //<-Set to "NULL"
+    From=STRAIGHT;          //<-Set to "NULL"
 }
 
+//--Automatyczne nastawianie, zmiana parametrow, zaleznie od typu zwrotnicy
 void Tor::setWTL()
 {
-    if(Type==1)
+    if(Type==1 || Type==3)
     {
         if(WhereTLook==STRAIGHT)
         {
@@ -17,7 +18,7 @@ void Tor::setWTL()
             return;
         }
     }
-    else if (Type==2)
+    else if (Type==2 || Type==4)
     {
         if(WhereTLook==STRAIGHT)
         {
@@ -28,6 +29,7 @@ void Tor::setWTL()
     WhereTLook=STRAIGHT;
 }
 
+//--Automatyczne nastawianie
 void Tor::setITrain()
 {
     if(this->getITrain()==0)
@@ -50,9 +52,26 @@ void Tor::setType(int num)
     Type = num;
 }
 
+//--Automatyczne nastawianie, zaleznie od obecnych parametrow obiektu
 void Tor::setFrom(QString string)
 {
-    From = string;
+    if(Type==1 || Type==3)
+    {
+        if(From==STRAIGHT)
+        {
+            From=UP;
+            return;
+        }
+    }
+    else if (Type==2 || Type==4)
+    {
+        if(From==STRAIGHT)
+        {
+            From=DOWN;
+            return;
+        }
+    }
+    From=STRAIGHT;
 }
 
 QString Tor::getWTL()

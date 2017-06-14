@@ -1,33 +1,36 @@
 #ifndef SEMAFOR_H
 #define SEMAFOR_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QHBoxLayout>
+#include "myheaders.h"
+
+//--Klasa reprezentujaca pociag
 
 class Semafor: public QLabel
 {
 private:
     int rozmiar;
+    int myColor;        //Kod Semafora -> jakie kolory beda wyswietlane
+    //--QLabele do obslugi kolorow
     QLabel *semafory;
-    //QLabel *SemaforLab;
     QLabel *SemRed;
     QLabel *SemOrange;
     QLabel *SemYellow;
     QLabel *SemGreen;
     QLabel *SemBlue;
+    //--Layout do graficznej implementacji powyzszych kolorow
     QHBoxLayout *box;
-    //Color *kolory;
-    int myColor;
+
 
 public:
     Semafor();
-    Semafor(int num = 0); //numer koloru
+    ~Semafor();
+    Semafor(int num = 0); //num = numer kodu koloru
 
 public slots:
-    void setColor(int numer);
+    void setColor(int numer); //Nastawianie danego kodu i wyswietlanie kombinacji kolorow
     void SemReset();
     int getColor();
+    QHBoxLayout* getlayout();
 
 };
 

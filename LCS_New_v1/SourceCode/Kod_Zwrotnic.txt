@@ -1,0 +1,132 @@
+int tmplgz[RAILLGZ] ={78, 107, 134, 136, 200};
+ ZwUp = new Stos(RAILLGZ,tmplgz);
+int tmpldz[RAILLDZ] = {74, 76, 103, 110, 114, 118, 150, 184};
+ZwDw = new Stos(RAILLDZ,tmpldz);
+
+
+void Widget::clean(int n, QString stile)
+{
+    int x,y,z;
+    x=y=z=0;
+    if((n<(ALTEZZA*LUNGHEZZA))&&(n>0))
+    {
+        kids = alla[n]->findChildren<Color *>(QString(), Qt::FindDirectChildrenOnly);
+        if(!(kids.isEmpty()))
+        {
+            if(alla[n]->getWTL()==UP)
+            {
+                x=0;
+                y=1;
+            }
+            else if(alla[n]->getWTL()==DOWN)
+            {
+                x=1;
+                y=0;
+            }
+            else if(alla[n]->getType()==2)
+            {
+                x=0;
+                y=1;
+                //What when blok is straight(?)
+                //from where trasa is coming: up or down??
+            }
+            else if(alla[n]->getType()==1)
+            {
+                x=1;
+                y=0;
+            }
+            else
+            {
+                qDebug("idk");
+            }
+            kids.at(x)->setStyleSheet(stile);
+            kids.at(y)->setStyleSheet("background-color: grey");
+            kids.clear();
+        }
+        else if(alla[n]->getITrain()==1)
+        {
+            alla[n]->setStyleSheet("background-color: blue");
+        }
+        else
+        {
+            alla[n]->setStyleSheet(stile);
+        }
+    }
+}
+
+	Locals		
+		flg	1	int
+		j	71	int
+		kolor	'w' 	119    	0x77	char
+		this	@0x28b6dc	Widget
+			[QWidget]	@0x28f174	QWidget
+			Ciuf	@0x28fc80	Pociag
+			End	@0x28fcac	int[10]
+			GBSemafory	@0x28fd04	QGridLayout
+			GBZwrotnice	@0x28fd00	QGridLayout
+			GTory	@0x28fcfc	QGridLayout
+			GenTrain	@0x28fdc4	QPushButton*[4]
+			Generation	@0x28fd8c	Stos
+			GsignalMapper	@0x28fe44	QSignalMapper
+			HorizontalZwSemGen	@0x28fd24	QHBoxLayout
+			MainLayout	@0x28fd08	QVBoxLayout
+			Perony	@0x28fc84	int[10]
+					16	int
+					51	int
+					86	int
+					121	int
+					156	int
+					191	int
+					226	int
+					261	int
+					296	int
+					331	int
+			Railld	@0x28fdac	Stos
+			Railldz	@0x28fdbc	Stos
+			Raillg	@0x28fda4	Stos
+			Raillgz	@0x28fdb4	Stos
+			Railpd	@0x28fdb0	Stos
+			Railpdz	@0x28fdc0	Stos
+			Railpg	@0x28fda8	Stos
+			Railpgz	@0x28fdb8	Stos
+			RailroadO	@0x28fda0	Stos
+			RailroadS	@0x28fd9c	Stos
+			SemStos	@0x28fd90	Stos
+			Semafory	@0x28fe24	QPushButton*[4]
+			SsignalMapper	@0x28fe40	QSignalMapper
+			Start	@0x28fcd4	int[10]
+			TrainCan	@0x28fd98	Stos
+			VGenTrain	@0x28fd0c	QVBoxLayout*[2]
+			VLay	@0x28fd28	QVBoxLayout*[23]
+			VSemaf	@0x28fd14	QVBoxLayout*[4]
+			ZsignalMapper	@0x28fe3c	QSignalMapper
+			ZwDw	@0x28fd88	Stos
+			ZwKol	@0x28fd94	Color
+			ZwUp	@0x28fd84	Stos
+			Zwrotnice	@0x28fdd4	QPushButton*[20]
+			alla	@0x28f190	Tor*[350]
+			kids	<0 items>	QList<Color*>
+			sella	@0x28f708	Semafor*[350]
+			staticMetaObject	@0x40c1e0	QMetaObject
+			temptor	@0x28fe34	Tor
+			ui	@0x28f18c	Ui::Widget
+		tmpKol	"background-color: white"	QString
+		tmpWTL	"Straight"	QString
+	Inspector		
+	Expressions		
+	Return Value		
+	Tooltip		
+
+
+1 tor: 9,26 
+2tor: 8, 27
+3tor: 121, 124
+4 tor: 330, 335
+5tor: 329, 336
+6tor: 328, 337
+7tor: 327, 338
+lewe: 35, 140
+prawe 69, 174
+i kolejno masz lewy , prawy 
+1 tor 9- lewy, 26 prawy
+i na koncu wejscia

@@ -1,31 +1,30 @@
 #ifndef POCIAG_H
 #define POCIAG_H
 
-#include <QLabel>
+#include "myheaders.h"
 
+//--Klasa reprezentujaca pociag
 
 class Pociag: public QLabel
 {
 private:
-    double Dlg;
-    double Predkosc;
-    int Coords;
-    int Direction;
-
+    double Dlg;         //Dlugosc pociagu
+    double Predkosc;    //Predkosc pociagu
+    int Coords;         //Na ktorym torze sie znajduje pociag
+    int Direction;      //W ktora strone jedzie pociag: 0.Lewo->Prawo, 1.Prawo->Lewo
 
 public:
-    static int Quanto;
+    static int Quanto;          //Ilosc pociagow w systemie
+    static void increment();    //Inkrementacja zmiennej statycznej
+    static void decrement();    //Dekrementacja zmiennej statycznej
+    void equal(Pociag* ciuf);   //Funkcja kopiujaca zmienne
     Pociag();
-
+    //--Nastawianie wartosci zmiennych klasy
     void setDlg(double n);
     void setPredkosc(double n);
     void setCoords(int n);
     void setDirection(int n);
-    static void increment();
-    static void decrement();
-
-    void equal(Pociag* ciuf);
-
+    //--Pobierania wartosci zmiennych klasy
     double getDlg();
     double getPredkosc();
     int getCoords();
