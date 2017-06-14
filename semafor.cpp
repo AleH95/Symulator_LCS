@@ -16,7 +16,8 @@ Semafor::Semafor(int num)
     box->setSpacing(0);
 
     box->addWidget(SemRed);
-    //SemRed->setStyleSheet("border-image:url(E:/Qt/Moje_projekty/LCS_V4/Symulator_LCS-ver1-Prototyp-Stacji/LCS_New_v1/SourceCode/semafor.png);");
+    //box->setStretch(0,1);
+   // SemRed->setStyleSheet("border-image:url(E:/Qt/Moje_projekty/LCS_V4/Symulator_LCS-ver1-Prototyp-Stacji/LCS_New_v1/SourceCode/semafor.png);");
     box->addWidget(SemOrange);
     box->addWidget(SemYellow);
     box->addWidget(SemGreen);
@@ -44,6 +45,8 @@ void Semafor::setColor(int numer)
     if(myColor == 0)
     {
         SemRed->setStyleSheet("background-color:red");
+        //SemRed->setStyleSheet("border-image:url(E:/Qt/Moje_projekty/LCS_V4/Symulator_LCS-ver1-Prototyp-Stacji/LCS_New_v1/SourceCode/semafor.png);");
+
         SemOrange->setStyleSheet("background-color:white");
         SemYellow->setStyleSheet("background-color:white");
         SemGreen->setStyleSheet("background-color:white");

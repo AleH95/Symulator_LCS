@@ -12,7 +12,7 @@ Widget::Widget(QWidget *parent) :
     int tmpzw[UZW+DZW] = {8,11,12};
     int tmptrain[TRAIN] = {(5*LUNGHEZZA)+0,(6*LUNGHEZZA)+0,(5*LUNGHEZZA)+28,(6*LUNGHEZZA)+28};
     //__________________________________________________________________________________
-    int tmpsem[SEM] = {35,69,140,174}; //<----------
+    int tmpsem[SEM] = {16,19,35,42,63,69,140,144,171,174,203,218}; //<----------
     int tmprrs[RAILROADS]={44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,
                                70,71,73,75,77,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,98,100,102,104,
                                105,106,108,112,113,115,116,117,119,126,128,129,130,132,133,137,139,
@@ -135,7 +135,7 @@ void Widget::inizializza()
         else if(IsInStos(j,SemStos,SEM))
         {
             //GTory->addWidget(sella[j],j/(LUNGHEZZA),i);
-            sella[j] = new Semafor(3);
+            sella[j] = new Semafor(0);
             GTory->addWidget(sella[j],j/(LUNGHEZZA),i);
         }
         //__________________________________________________________________________________
