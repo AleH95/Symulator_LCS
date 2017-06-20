@@ -22,6 +22,7 @@ public:
     int getiter();              //Pozycja iteratora we stosie
     int getpos(int num);        //Indeks pod ktorym sie znajduje wartosc num
     void reset();               //Resetowanie pozycji iteratora (Iterato=Rozmiar Stosu)
+    int* getTab();
 };
 
 #endif // STOS_H

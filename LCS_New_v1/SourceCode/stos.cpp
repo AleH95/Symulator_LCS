@@ -87,3 +87,8 @@ void Stos::reset()
 {
     iter=0;
 }
+
+int* Stos::getTab()
+{
+    return tab;
+}

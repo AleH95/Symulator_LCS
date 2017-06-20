@@ -10,7 +10,7 @@ Tor::Tor(int iT, int len, int typ) :
 //--Automatyczne nastawianie, zmiana parametrow, zaleznie od typu zwrotnicy
 void Tor::setWTL()
 {
-    if(Type==1 || Type==3)
+    if(Type==1 || Type==3) //zwrotnica gorna lewo-prawo, prawo-lewo
     {
         if(WhereTLook==STRAIGHT)
         {
@@ -18,13 +18,23 @@ void Tor::setWTL()
             return;
         }
     }
-    else if (Type==2 || Type==4)
+    else if (Type==2 || Type==4) //zwrotnica dolna lewo-prawo, prawo-lewo
     {
         if(WhereTLook==STRAIGHT)
         {
             WhereTLook=DOWN;
             return;
         }
+    }
+    else if(Type==5 || Type==7) //Ukosna gorna lewo-prawo, prawo-lewo
+    {
+        WhereTLook=UP;
+        return;
+    }
+    else if(Type==6 || Type==8) //Ukosna dolna lewo-prawo, prawo-lewo
+    {
+        WhereTLook=DOWN;
+        return;
     }
     WhereTLook=STRAIGHT;
 }
@@ -55,7 +65,7 @@ void Tor::setType(int num)
 //--Automatyczne nastawianie, zaleznie od obecnych parametrow obiektu
 void Tor::setFrom(QString string)
 {
-    if(Type==1 || Type==3)
+    if(Type==1 || Type==3) //zwrotnica gorna lewo-prawo, prawo-lewo
     {
         if(From==STRAIGHT)
         {
@@ -63,7 +73,7 @@ void Tor::setFrom(QString string)
             return;
         }
     }
-    else if (Type==2 || Type==4)
+    else if (Type==2 || Type==4) //zwrotnica dolna lewo-prawo, prawo-lewo
     {
         if(From==STRAIGHT)
         {
@@ -71,6 +81,12 @@ void Tor::setFrom(QString string)
             return;
         }
     }
+    /*
+    else if(Type==5 || Type==7) //Ukosna gorna lewo-prawo, prawo-lewo
+    {
+
+    }
+    */
     From=STRAIGHT;
 }
 

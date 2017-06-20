@@ -11,6 +11,7 @@ private:
     int rozmiar;
     int myColor;        //Kod Semafora -> jakie kolory beda wyswietlane
     //--QLabele do obslugi kolorow
+    QLabel *mainLab;
     QLabel *semafory;
     QLabel *SemRed;
     QLabel *SemOrange;

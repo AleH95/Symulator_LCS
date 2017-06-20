@@ -23,14 +23,14 @@ Color::Color(int num)
 
 QLabel* Color::get()
 {
-    if(citer>=croz || citer<0) //Jesli przekroczono dlugosc stosu (dwustronnie)
-    {
-        return NULL;
-    }
-    else
+    if(citer<croz && citer>=0) //Jesli przekroczono dlugosc stosu (dwustronnie)
     {
         citer++;
         return (ctab+(citer-1));
+    }
+    else
+    {
+        return NULL;
     }
 }
 
