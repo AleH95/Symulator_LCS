@@ -7,6 +7,7 @@
 #define STRAIGHT "Straight"
 #define UP "Up"
 #define DOWN "Down"
+#define NULLO "Null"
 
 #define LZWROTNICE 4 //Ilosc przyciskow zwrotnic w poziomie
 #define AZWROTNICE 5 //Ilosc przyciskow zwrotnic w pionie

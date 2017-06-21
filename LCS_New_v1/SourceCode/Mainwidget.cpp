@@ -24,22 +24,22 @@ Widget::Widget(QWidget *parent) :
                                    190,191,192,193,194,195,
                                    224,225,226,227,228,229,230,231,
                                    258,259,260,261,262,263,264,265,266,267,
-                                   292,293,294,295,296,297,298,299,300,301,302,303};
+                                   292,293,294,295,296,297,298,299,300,301,302,303}; //Straight
             /*int tmprro[RAILROADO]={43,62,120,125,145,148,149,152,153,154,155,160,
                                    161,162,163,166,167,170,183,186,187,188,189,
                                    196,197,198,199,202,219,220,221,222,223,232,
                                    233,234,235,236,255,256,257,268,269,270,291,304};
     */
             //tory ukośne
-            int tmplg[RAILLG] ={160, 162, 166, 170, 196, 198, 202, 232, 234, 236, 268, 270, 304};
-            int tmppg[RAILPG] = {145, 149, 153, 155, 183, 187, 189, 219, 221, 223, 255, 257, 291};
-            int tmpld[RAILLD] = {62, 120, 148, 152,154, 186, 188, 220, 222, 256};
-            int tmppd[RAILPD] = {43, 125, 167, 163, 161, 197, 199, 233, 235, 269};
+            int tmplg[RAILLG] ={160, 162, 166, 170, 196, 198, 202, 232, 234, 236, 268, 270, 304}; //lewy gorny
+            int tmppg[RAILPG] = {145, 149, 153, 155, 183, 187, 189, 219, 221, 223, 255, 257, 291}; //prawy gorny
+            int tmpld[RAILLD] = {62, 120, 148, 152,154, 186, 188, 220, 222, 256}; //lewa dolna
+            int tmppd[RAILPD] = {43, 125, 167, 163, 161, 197, 199, 233, 235, 269}; //prawa dolna
             //zwrotnice
-            int tmplgz[RAILLGZ] ={78, 107, 134, 136, 200};
-            int tmppgz[RAILPGZ] = {97, 109, 111, 138, 185};
-            int tmpldz[RAILLDZ] = {74, 76, 103, 110, 114, 118, 150, 184};
-            int tmppdz[RAILPDZ] = {72, 99, 101, 127, 131, 135, 165, 201};
+            int tmplgz[RAILLGZ] ={78, 107, 134, 136, 200}; //lewa gorna
+            int tmppgz[RAILPGZ] = {97, 109, 111, 138, 185}; //prawa gorna
+            int tmpldz[RAILLDZ] = {74, 76, 103, 110, 114, 118, 150, 184}; //lewa dolna
+            int tmppdz[RAILPDZ] = {72, 99, 101, 127, 131, 135, 165, 201}; //prawa dolna
 
             RailroadS = new Stos(RAILROADS,tmprrs);
             //RailroadO = new Stos(RAILROADO,tmprro);
@@ -160,7 +160,7 @@ void Widget::inizializza()
     //--Generowanie gridu torow
     for(j=0;j<LUNGHEZZA*ALTEZZA;j++)
     {
-        alla[j] = new Tor(0,100,0);
+        alla[j] = new Tor(0,100,-1);
         QString ela = "T"+QString::number(j/(LUNGHEZZA))+QString::number(i);
         //alla[j]->setText(ela);
         alla[j]->setStyleSheet("background-color: grey");
@@ -168,6 +168,12 @@ void Widget::inizializza()
         if(tempocasa!=-1)
         {
             alla[j]->setType(1);                                //Typ zwrotnica gorna
+            alla[j]->setWTL();
+/*
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+*/
             VLay[z] = new QVBoxLayout(alla[j]);
             VLay[z]->setSpacing(0);
             VLay[z]->setContentsMargins(0,0,0,0);
@@ -176,11 +182,18 @@ void Widget::inizializza()
             tmpCol = ZwKol->get();
             tmpCol->setStyleSheet("background-color: yellow");  //Domyslne nastawienia STRAIGHT wiec koniecznosc wyswietlania dolnej czesci
             VLay[z]->addWidget(tmpCol);
-            z++;
+
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+
+             z++;
+
         }
         else if(IsIn(j,Railldz->getTab(),RAILLDZ)!=-1)
         {
             alla[j]->setType(2);                                //Typ zwrotnica dolna
+            alla[j]->setWTL();
             VLay[z] = new QVBoxLayout(alla[j]);
             VLay[z]->setSpacing(0);
             VLay[z]->setContentsMargins(0,0,0,0);
@@ -215,11 +228,16 @@ void Widget::inizializza()
         }
 
         //__________________________________________________________________________________
-                else if(IsIn(j,RailroadS->getTab(), RAILROADS) !=-1)
-                        {
-                            alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png);");
+        else if(IsIn(j,RailroadS->getTab(), RAILROADS) !=-1)
+        {
+            alla[j]->setType(0);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+                            //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png);");
                             //GTory->addWidget(alla[j],j/(LUNGHEZZA),i);
-                        }
+        }
               /*  else if(IsInStos(j,RailroadO, RAILROADO) == true)
                 {
                     //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/Tor_prosty.png);");
@@ -227,38 +245,78 @@ void Widget::inizializza()
                 }*/
                 else if(IsIn(j,Raillg->getTab(),RAILLG) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_gora.png);");
+            alla[j]->setType(5);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_gora.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_gora.png);");
+
                 }
                 else if(IsIn(j,Railpg->getTab(),RAILPG) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora.png);");
+            alla[j]->setType(7);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora.png);");
                 }
                 else if(IsIn(j,Railld->getTab(),RAILLD) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_dol.png);");
+            alla[j]->setType(6);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_dol.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_dol.png);");
                 }
                 else if(IsIn(j,Railpd->getTab(),RAILPD) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol.png);");
+            alla[j]->setType(8);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol.png);");
                 }
 
                 //--------------zwrotnice--------------------------
-
+/*
                 else if(IsIn(j,Raillgz->getTab(),RAILLGZ) !=-1)
                 {
+            alla[j]->setType(1);
+            alla[j]->setWTL();
                     alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_gora_z.png);");
                 }
+                */
                 else if(IsIn(j,Railpgz->getTab(),RAILPGZ) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora_z.png);");
+            alla[j]->setType(3);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora_z.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+           // alla[j]->setType(8);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_gora_z.png);");
                 }
+        /*
                 else if(IsIn(j,Railldz->getTab(),RAILLDZ) !=-1)
                 {
+            alla[j]->setType(2);
+            alla[j]->setWTL();
                     alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/lewy_dol_z.png);");
                 }
+                */
                 else if(IsIn(j,Railpdz->getTab(),RAILPDZ) !=-1)
                 {
-                    alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol_z.png);");
+            alla[j]->setType(4);
+            alla[j]->setWTL();
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol_z.png");
+            mypix=mypix.scaled(40,25);
+            alla[j]->setPixmap(mypix);
+            //alla[j]->setType(8);
+                    //alla[j]->setStyleSheet("border-image:url(B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/prawy_dol_z.png);");
                 }
                 //_______________________
 
@@ -421,7 +479,7 @@ void Widget::inizializza()
     HorizontalZwSemGen->addLayout(GBSemafory,2);
     GBSemafory->setSpacing(15);
     HorizontalZwSemGen->addLayout(VGenTrain[z],0);
-    MainLayout->setSpacing(0);
+    MainLayout->setSpacing(2);
     MainLayout->addLayout(GTory);
     MainLayout->addLayout(HorizontalZwSemGen);
     //deallocate(tmpCol);
@@ -592,11 +650,13 @@ void Widget::Trasa(int j, char kolor, int flg)
 {
     QString tmpWTL = alla[j]->getWTL();
     QString tmpKol = "background-color: ";
+    int typeblok;
     if(j<(ALTEZZA*LUNGHEZZA)&&(j>0))
     {
+        typeblok = alla[j]->getType();
         if(flg==0)
         {
-            if((alla[j]->getType())!=0)
+            if(typeblok==1 || typeblok==2 || typeblok==3 || typeblok==4)
             {
                 kolor='y';
             }
@@ -677,12 +737,14 @@ void Widget::cleanAdjacent(int n, QString stile)
 {
     int tmp1, tmp2;
     QString stilo = "background-color: yellow";
+    int typeblok;
     for(tmp1=n;tmp1>0;tmp1=tmp1-LUNGHEZZA)
     {
         tmp2=tmp1;
         while(true)
         {
-                if((alla[tmp2]->getType())!=0)
+            typeblok = alla[tmp2]->getType();
+                if(typeblok==1 || typeblok==2 || typeblok==3 || typeblok==4)
                 {
                     clean(tmp2,stilo);
                 }
@@ -703,7 +765,8 @@ void Widget::cleanAdjacent(int n, QString stile)
         tmp2=tmp1;
         while(true)
         {
-            if((alla[tmp2]->getType())!=0)
+            typeblok = alla[tmp2]->getType();
+            if(typeblok==1 || typeblok==2 || typeblok==3 || typeblok==4)
             {
                 clean(tmp2,stilo);
             }
@@ -828,7 +891,9 @@ int Widget::TrasaTemp(int n)
 {
     if(n<(ALTEZZA*LUNGHEZZA)&&(n>0))
     {
-         QString tmpWTL = alla[n]->getWTL();
+        QString tmpWTL = alla[n]->getWTL();
+        QString canIgo;
+        int bloktype = alla[n]->getType();
 
         if(tmpWTL==STRAIGHT)
         {
@@ -845,13 +910,49 @@ int Widget::TrasaTemp(int n)
             n++;
             return n;
         }
-        else if(tmpWTL==UP)
+        else if(bloktype==8) //blok ukosny dol od prawej strony
         {
+            canIgo = alla[n-LUNGHEZZA]->getWTL();
+            if(canIgo==NULLO || canIgo==STRAIGHT) //dla blokow ukosnych, ide zgodnie z wtl ale jak null do w prawo
+            {
+                n++;
+            }
+            else
+            {
+                n=n-LUNGHEZZA;
+            }
+            return n;
+        }
+        else if(bloktype==7) //blok ukosny gora od prawej strony
+        {
+            canIgo = alla[n+LUNGHEZZA]->getWTL();
+            if(canIgo==NULLO || canIgo==STRAIGHT)
+            {
+                n++;
+            }
+            else
+            {
+                n=n+LUNGHEZZA;
+            }
+            return n;
+        }
+        else if (tmpWTL==UP)
+        {
+            if(bloktype==3)
+            {
+                n++;
+                return n;
+            }
             n=n-LUNGHEZZA;
             return n;
         }
         else if(tmpWTL==DOWN)
         {
+            if(bloktype==4)
+            {
+                n++;
+                return n;
+            }
             n=n+LUNGHEZZA;
             return n;
         }

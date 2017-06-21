@@ -3,7 +3,7 @@
 Tor::Tor(int iT, int len, int typ) :
         IsTrain(iT), Length(len), Type(typ)
 {
-    WhereTLook=STRAIGHT;    //<-Set to "NULL"
+    WhereTLook=NULLO;    //<-Set to "NULL"
     From=STRAIGHT;          //<-Set to "NULL"
 }
 
@@ -34,6 +34,11 @@ void Tor::setWTL()
     else if(Type==6 || Type==8) //Ukosna dolna lewo-prawo, prawo-lewo
     {
         WhereTLook=DOWN;
+        return;
+    }
+    else if(Type==-1) //Gdzie nie ma torow to nastawiamy NULLO
+    {
+        WhereTLook=NULLO;
         return;
     }
     WhereTLook=STRAIGHT;
