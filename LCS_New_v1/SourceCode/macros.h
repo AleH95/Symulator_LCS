@@ -54,4 +54,12 @@
 #define RAILPDZ 8
 //<----------
 
+//----Colors for StyleSheet--------//
+#define GREY "QLabel { background-color: grey }"
+#define YELLOW "QLabel { background-color: yellow }"
+#define BLUE "QLabel { background-color: blue }"
+#define WHITE "QLabel { background-color: white }"
+#define GREEN "QLabel { background-color: green }"
+#define RED "QLabel { background-color: red }"
+
 #endif // MACROS_H
