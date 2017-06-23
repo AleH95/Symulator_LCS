@@ -5,6 +5,15 @@ Color::Color()
 
 }
 
+Color::~Color()
+{
+    if(ctab!=NULL)
+    {
+        delete[] ctab;
+        ctab=NULL;
+    }
+}
+
 Color::Color(int num)
 {
     citer=0;
@@ -14,14 +23,14 @@ Color::Color(int num)
 
 QLabel* Color::get()
 {
-    if(citer>=croz || citer<0) //Jesli przekroczono dlugosc stosu (dwustronnie)
-    {
-        return NULL;
-    }
-    else
+    if(citer<croz && citer>=0) //Jesli przekroczono dlugosc stosu (dwustronnie)
     {
         citer++;
         return (ctab+(citer-1));
+    }
+    else
+    {
+        return NULL;
     }
 }
 
@@ -29,7 +38,7 @@ QLabel* Color::getThat(int num)
 {
     if(num>=croz || num<0)
     {
-        return (ctab+0);
+        return NULL;
     }
     else
     {

@@ -3,23 +3,14 @@
 Tor::Tor(int iT, int len, int typ) :
         IsTrain(iT), Length(len), Type(typ)
 {
-    /*
-    WhereTLook = new char[strlen(STRAIGHT)];
-    strcpy(WhereTLook,STRAIGHT);
-    */
-    WhereTLook=STRAIGHT;
-    From=STRAIGHT;
+    WhereTLook=NULLO;    //<-Set to "NULL"
+    From=STRAIGHT;          //<-Set to "NULL"
 }
 
+//--Automatyczne nastawianie, zmiana parametrow, zaleznie od typu zwrotnicy
 void Tor::setWTL()
 {
-    /*
-    delete[] WhereTLook;
-    WhereTLook = 0;
-    WhereTLook = new char[strlen(string)];
-    strcpy(WhereTLook,string);
-    */
-    if(Type==1)
+    if(Type==1 || Type==3) //zwrotnica gorna lewo-prawo, prawo-lewo
     {
         if(WhereTLook==STRAIGHT)
         {
@@ -27,7 +18,7 @@ void Tor::setWTL()
             return;
         }
     }
-    else if (Type==2)
+    else if (Type==2 || Type==4) //zwrotnica dolna lewo-prawo, prawo-lewo
     {
         if(WhereTLook==STRAIGHT)
         {
@@ -35,9 +26,25 @@ void Tor::setWTL()
             return;
         }
     }
+    else if(Type==5 || Type==7) //Ukosna gorna lewo-prawo, prawo-lewo
+    {
+        WhereTLook=UP;
+        return;
+    }
+    else if(Type==6 || Type==8) //Ukosna dolna lewo-prawo, prawo-lewo
+    {
+        WhereTLook=DOWN;
+        return;
+    }
+    else if(Type==-1) //Gdzie nie ma torow to nastawiamy NULLO
+    {
+        WhereTLook=NULLO;
+        return;
+    }
     WhereTLook=STRAIGHT;
 }
 
+//--Automatyczne nastawianie
 void Tor::setITrain()
 {
     if(this->getITrain()==0)
@@ -60,9 +67,26 @@ void Tor::setType(int num)
     Type = num;
 }
 
+//--Automatyczne nastawianie, zaleznie od obecnych parametrow obiektu
 void Tor::setFrom(QString string)
 {
-    From = string;
+    if(Type==1 || Type==3) //zwrotnica gorna lewo-prawo, prawo-lewo
+    {
+        if(From==STRAIGHT)
+        {
+            From=UP;
+            return;
+        }
+    }
+    else if (Type==2 || Type==4) //zwrotnica dolna lewo-prawo, prawo-lewo
+    {
+        if(From==STRAIGHT)
+        {
+            From=DOWN;
+            return;
+        }
+    }
+    From=STRAIGHT;
 }
 
 QString Tor::getWTL()
