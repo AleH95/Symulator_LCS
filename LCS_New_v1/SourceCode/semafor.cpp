@@ -13,7 +13,8 @@ Semafor::Semafor(int num)
 
     box = NULL;
     box = new QHBoxLayout(this);
-    box->setSpacing(5);
+    box->setSpacing(0);
+    box->setContentsMargins(0,0,0,0);
 
     box->addWidget(SemRed);
     box->addWidget(SemOrange);
@@ -90,18 +91,19 @@ void Semafor::setColor(int numer)
     }
     else if(myColor == 3)
     {
-        /*
+
         SemRed->setStyleSheet("background-color:green");
         SemOrange->setStyleSheet("background-color:grey");
         SemYellow->setStyleSheet("background-color:grey");
         SemGreen->setStyleSheet("background-color:orange");
         SemBlue->setStyleSheet("background-color:grey");
-        */
+        /*
         SemRed->setStyleSheet("background-color:green");
         SemOrange->setStyleSheet("background-color:white");
         SemYellow->setStyleSheet("background-color:orange");
         SemGreen->setStyleSheet("background-color:yellow");
         SemBlue->setStyleSheet("background-color:blue");
+        */
     }
     else if(myColor == 4)
     {

@@ -14,7 +14,7 @@ Widget::Widget(QWidget *parent) :
     int tmptrain[TRAIN] = {71,106,104,139}; //Pozycja przybywajacych pociagow
     int tmpsemper[SEMPER] = {9,26,8,27,121,124,330,335,329,336,328,337,327,338};
     int tmpperony[SEMPER] = {51,51,86,86,156,156,191,191,226,226,261,261,296,296};
-    int tmpsem[SEM] = {35,140,69,174}; //Semafore wejsciowe-wyjsciowe
+    int tmpsem[SEM] = {36,141,69,174}; //Semafore wejsciowe-wyjsciowe
     int tmprrs[RAILROADS]={44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,
                            70,71,73,75,77,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,98,100,102,104,
                            105,106,108,112,113,115,116,117,119,126,128,129,130,132,133,137,139,
@@ -155,13 +155,17 @@ void Widget::inizializza()
     HorizontalZwSemGen = new QHBoxLayout();
     i=z=p=Pz=0;
 
+    for(j=0;j<LUNGHEZZA*ALTEZZA;j++)
+    {
+    alla[j] = new Tor(0,100,-1);
+    QString ela = "T"+QString::number(j/(LUNGHEZZA))+QString::number(i);
+    //alla[j]->setText(ela);
+    alla[j]->setStyleSheet(GREY);
+    }
+
     //----------Generowanie gridu torow
     for(j=0;j<LUNGHEZZA*ALTEZZA;j++)
     {
-        alla[j] = new Tor(0,100,-1);
-        QString ela = "T"+QString::number(j/(LUNGHEZZA))+QString::number(i);
-        //alla[j]->setText(ela);
-        alla[j]->setStyleSheet(GREY);
         //--------------zwrotnice--------------------------
         //--ZWROTNICA GORNA (LEWA)
         if(IsIn(j,Raillgz->getTab(),RAILLGZ)!=-1)
@@ -241,16 +245,31 @@ void Widget::inizializza()
         //--SEMAFORY WEJSCIA-WYJSCIA
         else if(IsIn(j,SemStos->getTab(),SEM)!=-1)
         {
-            VSemaf[s]=new QVBoxLayout(alla[j]);
-            sella[s] = new Semafor(3);
+            int spqr = SemStos->Get();
+            VSemaf[s]=new QVBoxLayout(alla[spqr]);
+            VSemaf[s]->setContentsMargins(0,0,0,0);
+            sella[s] = new Semafor(0);
+
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/WWSemafor.png");
+            mypix=mypix.scaled(40,25);
+            sella[s]->setPixmap(mypix);
+
             VSemaf[s]->addWidget(sella[s]);
+
             s++;
         }
         //--SEMAFORY PERONOW
         else if(IsIn(j,OtherSem->getTab(),SEMPER)!=-1)
         {
-            VOSemaf[p]=new QVBoxLayout(alla[j]);
+            int spqr = OtherSem->Get();
+            VOSemaf[p]=new QVBoxLayout(alla[spqr]);
+            VOSemaf[p]->setContentsMargins(0,0,0,0);
             Osella[p] = new Semafor(0);
+
+            QPixmap mypix ("B:/Informatyka PWSZ Tarnow/SEMESTR IV/Architektury_Systemow_Komputerowych/LCS_New_v1/WWSemafor.png");
+            //mypix=mypix.scaled(40,25);
+            Osella[p]->setPixmap(mypix);
+
             VOSemaf[p]->addWidget(Osella[p]);
             p++;
         }
@@ -518,8 +537,6 @@ void Widget::inizializza()
 
     HorizontalZwSemGen->addLayout(GBZwrotnice,2);
     GBZwrotnice->setSpacing(5);
-    //HorizontalZwSemGen->addLayout(GBSemafory,2);
-    //GBSemafory->setSpacing(15);
     HorizontalZwSemGen->addLayout(LLSemafory,2);
     LLSemafory->setSpacing(5);
     HorizontalZwSemGen->addLayout(PLSemafory,2);
@@ -1348,7 +1365,7 @@ void Widget::SemaforChanged(int n)
         int trainnr = WhatTrainThere(n);
         if(IsTrainOnThere(Perony)->isEmpty()==false)
         {
-            Ciuf[trainnr]->setPredkosc(100); //SET TO 40
+            Ciuf[trainnr]->setPredkosc(40); //SET TO 40
             sella[num]->setColor(3);
         }
         else
@@ -1403,6 +1420,8 @@ void Widget::SemaforChanged(int n)
             ReversecleanAdjacent(gridTrain->at(0),GREY);
         }
         WyznaczTrase();
+
+        sella[num]->setColor(0);
     }
     else
     {
@@ -1478,12 +1497,13 @@ void Widget::ObslugaPeronu(int p)
     {
         int trainnr = WhatTrainThere(n);
         Ciuf[trainnr]->setPredkosc(100);
-        sella[p]->setColor(4);
+
 
         if(p%2!=0)
         {
             if((Ciuf[trainnr]->getDirection())==1) //==1 w prawo, ==2 w lewo
             {
+                Osella[p]->setColor(4);
                 alla[n]->setITrain();
                 QThread::msleep(trasaTime(trainnr,n)*1000);
                 alla[n+1]->setITrain();
@@ -1505,6 +1525,7 @@ void Widget::ObslugaPeronu(int p)
                     clean(End[peron],GREY);
                     ReversecleanAdjacent(End[peron],GREY);
                 }
+                Osella[p]->setColor(0);
 
             }
         }
@@ -1512,6 +1533,7 @@ void Widget::ObslugaPeronu(int p)
         {
             if((Ciuf[trainnr]->getDirection())==2)
             {
+                Osella[p]->setColor(4);
                 alla[n]->setITrain();
                 QThread::msleep(trasaTime(trainnr,n)*1000);
                 alla[n-1]->setITrain();
@@ -1533,6 +1555,7 @@ void Widget::ObslugaPeronu(int p)
                     clean(Start[peron],GREY);
                     cleanAdjacent(Start[peron],GREY);
                 }
+                Osella[p]->setColor(0);
             }
         }
 
